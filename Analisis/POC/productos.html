@@ -31,13 +31,14 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Producto</th>
+                                <th class="sortable" onclick="sortTable(0)">Producto ⇅</th>
                                 <th>Descripción</th>
-                                <th class="num">Precio Lista</th>
-                                <th class="num">Costo Est.</th>
-                                <th class="num">Margen</th>
-                                <th class="num">Stock</th>
-                                <th class="num">Hs. Prod.</th>
+                                <th class="num sortable" onclick="sortTable(2)">Precio Lista ⇅</th>
+                                <th class="num sortable" onclick="sortTable(3)">Costo Est. ⇅</th>
+                                <th class="num sortable" onclick="sortTable(4)">Margen ⇅</th>
+                                <th class="num sortable" onclick="sortTable(5)">Margen Mín. ⇅</th>
+                                <th class="num sortable" onclick="sortTable(6)">Stock ⇅</th>
+                                <th class="num sortable" onclick="sortTable(7)">Hs. Prod. ⇅</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -48,9 +49,15 @@
                                 <td class="num">$3.500</td>
                                 <td class="num">$1.800</td>
                                 <td class="num"><span class="badge badge-positive">48.6%</span></td>
+                                <td class="num">40%</td>
                                 <td class="num">24</td>
                                 <td class="num">1.5h</td>
-                                <td><button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-producto')">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="showToast('Producto oculto')">Ocultar</button>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Vela Lavanda 150gr</td>
@@ -58,9 +65,15 @@
                                 <td class="num">$2.800</td>
                                 <td class="num">$1.400</td>
                                 <td class="num"><span class="badge badge-positive">50.0%</span></td>
+                                <td class="num">40%</td>
                                 <td class="num">18</td>
                                 <td class="num">1.0h</td>
-                                <td><button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-producto')">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="showToast('Producto oculto')">Ocultar</button>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Vela Canela 200gr</td>
@@ -68,9 +81,15 @@
                                 <td class="num">$3.500</td>
                                 <td class="num">$1.575</td>
                                 <td class="num"><span class="badge badge-positive">55.0%</span></td>
+                                <td class="num">40%</td>
                                 <td class="num">12</td>
                                 <td class="num">1.5h</td>
-                                <td><button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-producto')">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="showToast('Producto oculto')">Ocultar</button>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Set Regalo x3</td>
@@ -78,9 +97,15 @@
                                 <td class="num">$8.500</td>
                                 <td class="num">$3.230</td>
                                 <td class="num"><span class="badge badge-positive">62.0%</span></td>
+                                <td class="num">50%</td>
                                 <td class="num">5</td>
                                 <td class="num">4.0h</td>
-                                <td><button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-producto')">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="showToast('Producto oculto')">Ocultar</button>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Difusor Vainilla</td>
@@ -88,9 +113,15 @@
                                 <td class="num">$4.200</td>
                                 <td class="num">$2.600</td>
                                 <td class="num"><span class="badge badge-warning">38.1%</span></td>
+                                <td class="num">35%</td>
                                 <td class="num">8</td>
                                 <td class="num">0.5h</td>
-                                <td><button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-receta')">Receta</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-producto')">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="showToast('Producto oculto')">Ocultar</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -124,6 +155,16 @@
                     <div class="form-group">
                         <label>Horas Estimadas Producción</label>
                         <input type="number" placeholder="0" min="0" step="0.5">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Costo Hora Producción ($)</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Margen Mínimo Esperado (%)</label>
+                        <input type="number" placeholder="Ej: 40" min="0" max="100">
                     </div>
                 </div>
             </div>
@@ -186,8 +227,17 @@
                 </table>
                 <div
                     style="text-align:right; margin-top:14px; padding-top:14px; border-top:1px solid var(--color-border);">
+                    <span class="text-secondary">Costo materias primas:</span>
+                    <span class="fw-600" style="margin-left:8px;">$1.800</span>
+                </div>
+                <div style="text-align:right; margin-top:8px;">
+                    <span class="text-secondary">Costo mano de obra (1.5h × $200/h):</span>
+                    <span class="fw-600" style="margin-left:8px;">$300</span>
+                </div>
+                <div
+                    style="text-align:right; margin-top:8px; padding-top:8px; border-top:1px solid var(--color-border);">
                     <span class="text-secondary">Costo total estimado:</span>
-                    <span class="fw-600" style="font-size:1.1rem; margin-left:8px;">$1.800</span>
+                    <span class="fw-600" style="font-size:1.1rem; margin-left:8px;">$2.100</span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -199,7 +249,14 @@
     </div>
 
     <script src="js/shared.js"></script>
-    <script>initPage('productos', 'Productos', 'Catálogo y recetas');</script>
+    <script>
+        initPage('productos', 'Productos', 'Catálogo y recetas');
+
+        // Placeholder sort function for POC
+        function sortTable(colIndex) {
+            showToast('Ordenar por columna ' + colIndex + ' (no disponible en POC)');
+        }
+    </script>
 </body>
 
 </html>

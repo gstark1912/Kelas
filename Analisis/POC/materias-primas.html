@@ -31,6 +31,7 @@
                         <option value="">Todas las unidades</option>
                         <option>gr</option>
                         <option>ml</option>
+                        <option>cm</option>
                         <option>unidad</option>
                     </select>
                 </div>
@@ -43,6 +44,7 @@
                                 <th>Materia Prima</th>
                                 <th>Unidad</th>
                                 <th class="num">Stock Actual</th>
+                                <th class="num">Alerta Mín.</th>
                                 <th class="num">Precio Vigente</th>
                                 <th>Estado</th>
                                 <th class="num">Última Compra</th>
@@ -54,96 +56,112 @@
                                 <td class="fw-600">Cera de Soja</td>
                                 <td>gr</td>
                                 <td class="num">4.200</td>
+                                <td class="num">1.000</td>
                                 <td class="num">$5,00/gr</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">22/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Fragancia Vainilla</td>
                                 <td>gr</td>
                                 <td class="num">380</td>
+                                <td class="num">200</td>
                                 <td class="num">$15,00/gr</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">18/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Fragancia Lavanda</td>
                                 <td>gr</td>
                                 <td class="num">150</td>
+                                <td class="num">200</td>
                                 <td class="num">$14,00/gr</td>
                                 <td><span class="badge badge-warning">Bajo</span></td>
                                 <td class="num">10/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Fragancia Canela</td>
                                 <td>gr</td>
                                 <td class="num">520</td>
+                                <td class="num">200</td>
                                 <td class="num">$16,00/gr</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">15/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Mecha Algodón</td>
                                 <td>unidad</td>
                                 <td class="num">85</td>
+                                <td class="num">20</td>
                                 <td class="num">$200/u</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">20/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Frasco Vidrio 200ml</td>
                                 <td>unidad</td>
                                 <td class="num">32</td>
+                                <td class="num">10</td>
                                 <td class="num">$400/u</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">12/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Frasco Vidrio 150ml</td>
                                 <td>unidad</td>
                                 <td class="num">0</td>
+                                <td class="num">10</td>
                                 <td class="num">$350/u</td>
                                 <td><span class="badge badge-negative">Sin stock</span></td>
                                 <td class="num">05/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-600">Aceite Esencial Vainilla</td>
                                 <td>ml</td>
                                 <td class="num">200</td>
+                                <td class="num">50</td>
                                 <td class="num">$25,00/ml</td>
                                 <td><span class="badge badge-positive">OK</span></td>
                                 <td class="num">08/04/2026</td>
                                 <td>
                                     <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
                                     <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-editar-mp')">Editar</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -166,22 +184,74 @@
                     <label>Nombre</label>
                     <input type="text" placeholder="Ej: Cera de Soja">
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unidad de Medida</label>
+                        <select>
+                            <option value="">Seleccionar...</option>
+                            <option>gr</option>
+                            <option>kg</option>
+                            <option>ml</option>
+                            <option>lt</option>
+                            <option>cm</option>
+                            <option>unidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Alerta Mínimo de Stock</label>
+                        <input type="number" placeholder="Ej: 100" min="0">
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label>Unidad de Medida</label>
-                    <select>
-                        <option value="">Seleccionar...</option>
-                        <option>gr</option>
-                        <option>kg</option>
-                        <option>ml</option>
-                        <option>lt</option>
-                        <option>unidad</option>
-                    </select>
+                    <label>Composición (opcional — si se forma a partir de otras MP)</label>
+                    <div
+                        style="background:var(--color-bg-secondary); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-text-secondary);">
+                        Funcionalidad de receta de materia prima no disponible en POC.
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn" onclick="closeModal('modal-nueva-mp')">Cancelar</button>
                 <button class="btn btn-primary"
                     onclick="closeModal('modal-nueva-mp'); showToast('✓ Materia prima creada — stock inicial: 0')">Crear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar MP -->
+    <div class="modal-overlay" id="modal-editar-mp">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Editar Materia Prima</h2>
+                <button class="modal-close" onclick="closeModal('modal-editar-mp')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" value="Cera de Soja">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unidad de Medida</label>
+                        <select>
+                            <option selected>gr</option>
+                            <option>kg</option>
+                            <option>ml</option>
+                            <option>lt</option>
+                            <option>cm</option>
+                            <option>unidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Alerta Mínimo de Stock</label>
+                        <input type="number" value="1000" min="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-editar-mp')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-editar-mp'); showToast('✓ Materia prima actualizada')">Guardar</button>
             </div>
         </div>
     </div>
@@ -240,6 +310,12 @@
                     <label>Notas</label>
                     <textarea placeholder="Notas adicionales..."></textarea>
                 </div>
+                <div class="form-group">
+                    <label style="display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" style="width:auto;">
+                        Excluir del cálculo de costo promedio (compra con súper descuento)
+                    </label>
+                </div>
                 <div
                     style="background:var(--color-bg-secondary); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-text-secondary);">
                     Precio por unidad calculado: <strong>se calcula automáticamente</strong><br>
@@ -268,9 +344,7 @@
                         <label>Tipo de Ajuste</label>
                         <select>
                             <option value="">Seleccionar...</option>
-                            <option>Vencimiento (-)</option>
-                            <option>Rotura (-)</option>
-                            <option>Pérdida (-)</option>
+                            <option>Pérdida (vencimiento/rotura/extravío) (-)</option>
                             <option>Corrección inventario (+/-)</option>
                             <option>Otro</option>
                         </select>
@@ -358,7 +432,7 @@
                         </tr>
                         <tr>
                             <td>25/04</td>
-                            <td><span class="badge badge-negative">Ajuste</span></td>
+                            <td><span class="badge badge-negative">Pérdida</span></td>
                             <td class="num text-negative">-200gr</td>
                             <td class="num">3.200</td>
                             <td>Vencimiento</td>

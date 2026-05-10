@@ -52,7 +52,7 @@
 
                 <!-- Filters -->
                 <div class="filters-bar">
-                    <select id="filter-cuenta" onchange="filterMovimientos()">
+                    <select id="filter-cuenta">
                         <option value="">Todas las cuentas</option>
                         <option>Efectivo</option>
                         <option>Banco</option>
@@ -63,10 +63,15 @@
                         <option>Ingreso</option>
                         <option>Egreso</option>
                     </select>
-                    <select id="filter-origen">
-                        <option value="">Todos los orígenes</option>
-                        <option>Automático</option>
-                        <option>Manual</option>
+                    <select id="filter-concepto">
+                        <option value="">Todos los conceptos</option>
+                        <option>Venta</option>
+                        <option>Compra MP</option>
+                        <option>Gasto</option>
+                        <option>Aporte de capital</option>
+                        <option>Retiro de efectivo</option>
+                        <option>Transferencia</option>
+                        <option>Ajuste de saldo</option>
                     </select>
                     <input type="date" value="2026-04-01"> <span class="text-muted">a</span> <input type="date"
                         value="2026-04-28">
@@ -91,6 +96,7 @@
                                 <th>Cuenta</th>
                                 <th>Tipo</th>
                                 <th>Concepto</th>
+                                <th>Descripción</th>
                                 <th>Origen</th>
                                 <th class="num">Monto</th>
                             </tr>
@@ -100,6 +106,7 @@
                                 <td>28/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-primary">Venta</span></td>
                                 <td>Venta #42 — Feria</td>
                                 <td><a href="ventas.html">Venta #42</a></td>
                                 <td class="num fw-600 text-positive">+$9.300</td>
@@ -108,14 +115,16 @@
                                 <td>28/04</td>
                                 <td>Mercado Pago</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
-                                <td>Gasto — Promoción Instagram</td>
-                                <td><a href="gastos.html">Gasto</a></td>
+                                <td><span class="badge badge-neutral">Gasto</span></td>
+                                <td>Promoción Instagram</td>
+                                <td><a href="gastos.html">Gasto — Marketing</a></td>
                                 <td class="num fw-600 text-negative">-$3.500</td>
                             </tr>
                             <tr>
                                 <td>27/04</td>
                                 <td>Mercado Pago</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-primary">Venta</span></td>
                                 <td>Venta #41 — Instagram</td>
                                 <td><a href="ventas.html">Venta #41</a></td>
                                 <td class="num fw-600 text-positive">+$10.500</td>
@@ -124,7 +133,8 @@
                                 <td>27/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
-                                <td>Compra MP — Cera de Soja 1kg</td>
+                                <td><span class="badge badge-neutral">Compra MP</span></td>
+                                <td>Cera de Soja 1kg</td>
                                 <td><a href="materias-primas.html">Compra #18</a></td>
                                 <td class="num fw-600 text-negative">-$5.000</td>
                             </tr>
@@ -132,15 +142,17 @@
                                 <td>27/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
-                                <td>Gasto — Envíos 5 paquetes</td>
-                                <td><a href="gastos.html">Gasto</a></td>
+                                <td><span class="badge badge-neutral">Gasto</span></td>
+                                <td>Envíos 5 paquetes</td>
+                                <td><a href="gastos.html">Gasto — Envíos</a></td>
                                 <td class="num fw-600 text-negative">-$2.500</td>
                             </tr>
                             <tr>
                                 <td>26/04</td>
                                 <td>Banco</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
-                                <td>Venta #40 — WhatsApp</td>
+                                <td><span class="badge badge-primary">Venta</span></td>
+                                <td>Venta #40 — Tienda</td>
                                 <td><a href="ventas.html">Venta #40</a></td>
                                 <td class="num fw-600 text-positive">+$8.500</td>
                             </tr>
@@ -148,6 +160,7 @@
                                 <td>25/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-primary">Venta</span></td>
                                 <td>Venta #39 — Feria</td>
                                 <td><a href="ventas.html">Venta #39</a></td>
                                 <td class="num fw-600 text-positive">+$19.600</td>
@@ -156,14 +169,16 @@
                                 <td>25/04</td>
                                 <td>Banco</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
-                                <td>Gasto — Cajas y papel de seda</td>
-                                <td><a href="gastos.html">Gasto</a></td>
+                                <td><span class="badge badge-neutral">Gasto</span></td>
+                                <td>Cajas y papel de seda</td>
+                                <td><a href="gastos.html">Gasto — Packaging</a></td>
                                 <td class="num fw-600 text-negative">-$4.200</td>
                             </tr>
                             <tr>
                                 <td>24/04</td>
                                 <td>Mercado Pago</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-primary">Venta</span></td>
                                 <td>Venta #38 — Instagram</td>
                                 <td><a href="ventas.html">Venta #38</a></td>
                                 <td class="num fw-600 text-positive">+$8.400</td>
@@ -172,15 +187,17 @@
                                 <td>23/04</td>
                                 <td>Banco</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-neutral">Aporte de capital</span></td>
                                 <td>Aporte de capital</td>
-                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td><span class="text-muted">Manual</span></td>
                                 <td class="num fw-600 text-positive">+$20.000</td>
                             </tr>
                             <tr>
                                 <td>22/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
-                                <td>Venta #37 — Local</td>
+                                <td><span class="badge badge-primary">Venta</span></td>
+                                <td>Venta #37 — Tienda</td>
                                 <td><a href="ventas.html">Venta #37</a></td>
                                 <td class="num fw-600 text-positive">+$7.000</td>
                             </tr>
@@ -188,24 +205,27 @@
                                 <td>22/04</td>
                                 <td>Mercado Pago</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
-                                <td>Gasto — Diseño gráfico</td>
-                                <td><a href="gastos.html">Gasto</a></td>
+                                <td><span class="badge badge-neutral">Gasto</span></td>
+                                <td>Diseño gráfico</td>
+                                <td><a href="gastos.html">Gasto — Marketing</a></td>
                                 <td class="num fw-600 text-negative">-$3.000</td>
                             </tr>
                             <tr>
                                 <td>21/04</td>
                                 <td>Efectivo</td>
                                 <td><span class="badge badge-negative">Egreso</span></td>
+                                <td><span class="badge badge-neutral">Transferencia</span></td>
                                 <td>Transferencia a Banco</td>
-                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td><span class="text-muted">Manual</span></td>
                                 <td class="num fw-600 text-negative">-$15.000</td>
                             </tr>
                             <tr>
                                 <td>21/04</td>
                                 <td>Banco</td>
                                 <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td><span class="badge badge-neutral">Transferencia</span></td>
                                 <td>Transferencia desde Efectivo</td>
-                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td><span class="text-muted">Manual</span></td>
                                 <td class="num fw-600 text-positive">+$15.000</td>
                             </tr>
                         </tbody>
@@ -258,7 +278,6 @@
                         <option>Retiro de efectivo</option>
                         <option>Aporte de capital</option>
                         <option>Ajuste de saldo</option>
-                        <option>Otro</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -328,14 +347,7 @@
     </div>
 
     <script src="js/shared.js"></script>
-    <script>
-        initPage('caja', 'Caja', 'Cuentas y movimientos');
-
-        function filterMovimientos() {
-            // Placeholder for filter interaction
-            showToast('Filtros aplicados');
-        }
-    </script>
+    <script>initPage('caja', 'Caja', 'Cuentas y movimientos');</script>
 </body>
 
 </html>
