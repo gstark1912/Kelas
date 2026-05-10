@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas - Ventas</title>
+    <link rel="icon" href="kelas.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar"></aside>
+        <main class="main-area">
+            <header class="topbar"></header>
+            <div class="content">
+
+                <div class="page-header">
+                    <h1>Ventas</h1>
+                    <button class="btn btn-primary" onclick="openModal('modal-venta')">+ Nueva Venta</button>
+                </div>
+
+                <div class="filters-bar">
+                    <select>
+                        <option value="">Todos los canales</option>
+                        <option>Feria</option>
+                        <option>Instagram</option>
+                        <option>WhatsApp</option>
+                        <option>Local</option>
+                    </select>
+                    <select>
+                        <option value="">Todos los medios de pago</option>
+                        <option>Efectivo</option>
+                        <option>Transferencia</option>
+                        <option>Mercado Pago</option>
+                    </select>
+                    <input type="date" value="2026-04-01"> <span class="text-muted">a</span> <input type="date"
+                        value="2026-04-28">
+                </div>
+
+                <!-- KPIs -->
+                <div class="kpi-grid" style="grid-template-columns: repeat(5, 1fr);">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ventas</div>
+                        <div class="kpi-value">32</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ingresos</div>
+                        <div class="kpi-value">$185.300</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">COGS</div>
+                        <div class="kpi-value">$82.400</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Costos Venta</div>
+                        <div class="kpi-value">$12.630</div>
+                    </div>
+                    <div class="kpi-card kpi-positive">
+                        <div class="kpi-label">Ganancia Neta</div>
+                        <div class="kpi-value">+$90.270</div>
+                    </div>
+                </div>
+
+                <!-- Sales table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fecha</th>
+                                <th>Canal</th>
+                                <th>Ítems</th>
+                                <th class="num">Ingreso Bruto</th>
+                                <th class="num">COGS</th>
+                                <th class="num">Costos Vta</th>
+                                <th class="num">Ganancia</th>
+                                <th>Pago</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-muted">#42</td>
+                                <td>28/04</td>
+                                <td><span class="badge badge-primary">Feria</span></td>
+                                <td>2x Vainilla, 1x Lavanda</td>
+                                <td class="num">$9.300</td>
+                                <td class="num text-muted">$5.200</td>
+                                <td class="num text-muted">$1.000</td>
+                                <td class="num fw-600 text-positive">+$3.100</td>
+                                <td><span class="badge badge-neutral">Efectivo</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#41</td>
+                                <td>27/04</td>
+                                <td><span class="badge badge-primary">Instagram</span></td>
+                                <td>3x Vainilla</td>
+                                <td class="num">$10.500</td>
+                                <td class="num text-muted">$5.400</td>
+                                <td class="num text-muted">$1.130</td>
+                                <td class="num fw-600 text-positive">+$3.970</td>
+                                <td><span class="badge badge-neutral">Mercado Pago</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#40</td>
+                                <td>26/04</td>
+                                <td><span class="badge badge-primary">WhatsApp</span></td>
+                                <td>1x Set Regalo</td>
+                                <td class="num">$8.500</td>
+                                <td class="num text-muted">$3.230</td>
+                                <td class="num text-muted">$500</td>
+                                <td class="num fw-600 text-positive">+$4.770</td>
+                                <td><span class="badge badge-neutral">Transferencia</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#39</td>
+                                <td>25/04</td>
+                                <td><span class="badge badge-primary">Feria</span></td>
+                                <td>4x Canela, 2x Lavanda</td>
+                                <td class="num">$19.600</td>
+                                <td class="num text-muted">$9.100</td>
+                                <td class="num text-muted">$1.000</td>
+                                <td class="num fw-600 text-positive">+$9.500</td>
+                                <td><span class="badge badge-neutral">Efectivo</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#38</td>
+                                <td>24/04</td>
+                                <td><span class="badge badge-primary">Instagram</span></td>
+                                <td>2x Difusor Vainilla</td>
+                                <td class="num">$8.400</td>
+                                <td class="num text-muted">$5.200</td>
+                                <td class="num text-muted">$1.004</td>
+                                <td class="num fw-600 text-positive">+$2.196</td>
+                                <td><span class="badge badge-neutral">Mercado Pago</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#37</td>
+                                <td>22/04</td>
+                                <td><span class="badge badge-primary">Local</span></td>
+                                <td>1x Vainilla, 1x Canela</td>
+                                <td class="num">$7.000</td>
+                                <td class="num text-muted">$3.375</td>
+                                <td class="num text-muted">$0</td>
+                                <td class="num fw-600 text-positive">+$3.625</td>
+                                <td><span class="badge badge-neutral">Efectivo</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#36</td>
+                                <td>20/04</td>
+                                <td><span class="badge badge-primary">WhatsApp</span></td>
+                                <td>5x Vainilla</td>
+                                <td class="num">$16.500</td>
+                                <td class="num text-muted">$9.000</td>
+                                <td class="num text-muted">$500</td>
+                                <td class="num fw-600 text-positive">+$7.000</td>
+                                <td><span class="badge badge-neutral">Transferencia</span></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-venta')">Ver</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nueva Venta -->
+    <div class="modal-overlay" id="modal-venta">
+        <div class="modal" style="width:640px;">
+            <div class="modal-header">
+                <h2>Nueva Venta</h2>
+                <button class="modal-close" onclick="closeModal('modal-venta')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                    <div class="form-group">
+                        <label>Canal</label>
+                        <select>
+                            <option value="">Seleccionar...</option>
+                            <option>Feria</option>
+                            <option>Instagram</option>
+                            <option>WhatsApp</option>
+                            <option>Local</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Medio de Pago</label>
+                        <select>
+                            <option value="">Seleccionar...</option>
+                            <option>Efectivo</option>
+                            <option>Transferencia</option>
+                            <option>Mercado Pago</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Items -->
+                <div style="font-size:0.82rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:8px;">
+                    Ítems de la venta:</div>
+                <div
+                    style="border:1px solid var(--color-border); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;">
+                    <table style="font-size:0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th class="num" style="width:80px;">Cant.</th>
+                                <th class="num" style="width:110px;">Precio Unit.</th>
+                                <th class="num" style="width:100px;">Subtotal</th>
+                                <th style="width:40px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="venta-items">
+                            <tr>
+                                <td>
+                                    <select
+                                        style="width:100%; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; font-size:0.85rem;">
+                                        <option>Vela Vainilla 200gr</option>
+                                        <option>Vela Lavanda 150gr</option>
+                                        <option>Vela Canela 200gr</option>
+                                        <option>Set Regalo x3</option>
+                                        <option>Difusor Vainilla</option>
+                                    </select>
+                                </td>
+                                <td class="num"><input type="number" value="2" min="1"
+                                        style="width:60px; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; text-align:right; font-size:0.85rem;">
+                                </td>
+                                <td class="num"><input type="number" value="3500"
+                                        style="width:90px; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; text-align:right; font-size:0.85rem;">
+                                </td>
+                                <td class="num fw-600">$7.000</td>
+                                <td><button class="btn btn-sm btn-danger" style="padding:2px 6px;">✕</button></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select
+                                        style="width:100%; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; font-size:0.85rem;">
+                                        <option>Vela Lavanda 150gr</option>
+                                        <option>Vela Vainilla 200gr</option>
+                                        <option>Vela Canela 200gr</option>
+                                        <option>Set Regalo x3</option>
+                                        <option>Difusor Vainilla</option>
+                                    </select>
+                                </td>
+                                <td class="num"><input type="number" value="1" min="1"
+                                        style="width:60px; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; text-align:right; font-size:0.85rem;">
+                                </td>
+                                <td class="num"><input type="number" value="2800"
+                                        style="width:90px; padding:4px 6px; border:1px solid var(--color-border); border-radius:4px; text-align:right; font-size:0.85rem;">
+                                </td>
+                                <td class="num fw-600">$2.800</td>
+                                <td><button class="btn btn-sm btn-danger" style="padding:2px 6px;">✕</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-sm" onclick="showToast('Agregar ítem no disponible en POC')"
+                    style="margin-bottom:16px;">+ Agregar ítem</button>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Descuento ($)</label>
+                        <input type="number" value="500" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Costo Impositivo ($)</label>
+                        <input type="number" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Costo Canal ($)</label>
+                        <input type="number" value="1000" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea placeholder="Notas sobre la venta..."></textarea>
+                </div>
+
+                <div
+                    style="background:var(--color-bg-secondary); padding:12px 16px; border-radius:var(--radius); font-size:0.85rem;">
+                    <div class="flex justify-between"><span>Subtotal:</span> <strong>$9.800</strong></div>
+                    <div class="flex justify-between"><span>Descuento:</span> <span>-$500</span></div>
+                    <div class="flex justify-between"
+                        style="padding-top:8px; margin-top:8px; border-top:1px solid var(--color-border);">
+                        <span class="fw-600">Ingreso Bruto:</span> <strong style="font-size:1.05rem;">$9.300</strong>
+                    </div>
+                    <div class="flex justify-between text-muted mt-4"><span>COGS estimado:</span> <span>$5.200</span>
+                    </div>
+                    <div class="flex justify-between text-muted mt-4"><span>Costos venta:</span> <span>$1.000</span>
+                    </div>
+                    <div class="flex justify-between text-positive mt-4"><span class="fw-600">Ganancia neta
+                            estimada:</span> <strong>+$3.100</strong></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-venta')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-venta'); showToast('✓ Venta #43 registrada — $9.300 ingresados a caja')">Registrar
+                    Venta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Detalle Venta -->
+    <div class="modal-overlay" id="modal-detalle-venta">
+        <div class="modal" style="width:600px;">
+            <div class="modal-header">
+                <h2>Venta #42</h2>
+                <button class="modal-close" onclick="closeModal('modal-detalle-venta')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex justify-between mb-16" style="font-size:0.88rem;">
+                    <div><span class="text-secondary">Fecha:</span> 28/04/2026</div>
+                    <div><span class="text-secondary">Canal:</span> <span class="badge badge-primary">Feria</span></div>
+                    <div><span class="text-secondary">Pago:</span> <span class="badge badge-neutral">Efectivo</span>
+                    </div>
+                </div>
+
+                <table style="font-size:0.85rem;">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class="num">Cant.</th>
+                            <th class="num">Precio Unit.</th>
+                            <th class="num">Subtotal</th>
+                            <th class="num">COGS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vela Vainilla 200gr</td>
+                            <td class="num">2</td>
+                            <td class="num">$3.500</td>
+                            <td class="num">$7.000</td>
+                            <td class="num text-muted">$3.600</td>
+                        </tr>
+                        <tr>
+                            <td>Vela Lavanda 150gr</td>
+                            <td class="num">1</td>
+                            <td class="num">$2.800</td>
+                            <td class="num">$2.800</td>
+                            <td class="num text-muted">$1.400</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div
+                    style="margin-top:16px; padding:12px 16px; background:var(--color-bg-secondary); border-radius:var(--radius); font-size:0.85rem;">
+                    <div class="flex justify-between"><span>Subtotal:</span> <span>$9.800</span></div>
+                    <div class="flex justify-between"><span>Descuento:</span> <span>-$500</span></div>
+                    <div class="flex justify-between fw-600"
+                        style="padding-top:8px; margin-top:8px; border-top:1px solid var(--color-border);">
+                        <span>Ingreso Bruto:</span> <span>$9.300</span>
+                    </div>
+                    <div class="flex justify-between text-muted mt-4"><span>COGS:</span> <span>$5.200</span></div>
+                    <div class="flex justify-between mt-4"><span>Ganancia Bruta:</span> <span>$4.100</span></div>
+                    <div class="flex justify-between text-muted mt-4"><span>Costo Impositivo:</span> <span>$0</span>
+                    </div>
+                    <div class="flex justify-between text-muted mt-4"><span>Costo Canal:</span> <span>$1.000</span>
+                    </div>
+                    <div class="flex justify-between text-positive fw-600 mt-8"
+                        style="padding-top:8px; border-top:1px solid var(--color-border); font-size:1rem;">
+                        <span>Ganancia Neta:</span> <span>+$3.100</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px; font-size:0.85rem; color:var(--color-text-secondary);">
+                    Notas: Descuento por compra de 3 unidades
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-detalle-venta')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script>initPage('ventas', 'Ventas', 'Registro de ventas');</script>
+</body>
+
+</html>

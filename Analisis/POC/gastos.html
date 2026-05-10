@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas - Gastos</title>
+    <link rel="icon" href="kelas.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar"></aside>
+        <main class="main-area">
+            <header class="topbar"></header>
+            <div class="content">
+
+                <div class="page-header">
+                    <h1>Gastos</h1>
+                    <button class="btn btn-primary" onclick="openModal('modal-gasto')">+ Nuevo Gasto</button>
+                </div>
+
+                <div class="filters-bar">
+                    <select>
+                        <option value="">Todas las categorías</option>
+                        <option>Marketing</option>
+                        <option>Packaging</option>
+                        <option>Envíos</option>
+                        <option>Alquiler</option>
+                        <option>Servicios</option>
+                        <option>Herramientas</option>
+                        <option>Otro</option>
+                    </select>
+                    <select>
+                        <option value="">Todas las cuentas</option>
+                        <option>Efectivo</option>
+                        <option>Banco</option>
+                        <option>Mercado Pago</option>
+                    </select>
+                    <input type="date" value="2026-04-01"> <span class="text-muted">a</span> <input type="date"
+                        value="2026-04-28">
+                </div>
+
+                <!-- KPIs -->
+                <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="kpi-card kpi-negative">
+                        <div class="kpi-label">Total Gastos</div>
+                        <div class="kpi-value">$34.500</div>
+                        <div class="kpi-sub">18 registros</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Mayor Categoría</div>
+                        <div class="kpi-value" style="font-size:1.2rem;">Marketing</div>
+                        <div class="kpi-sub">$12.000 (34.8%)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Promedio Diario</div>
+                        <div class="kpi-value">$1.232</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">vs. Mes Anterior</div>
+                        <div class="kpi-value text-negative">+12%</div>
+                        <div class="kpi-sub">Marzo: $30.800</div>
+                    </div>
+                </div>
+
+                <!-- Expenses table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Categoría</th>
+                                <th>Descripción</th>
+                                <th>Cuenta</th>
+                                <th class="num">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>28/04/2026</td>
+                                <td><span class="badge badge-neutral">Marketing</span></td>
+                                <td>Promoción Instagram — Día de la Madre</td>
+                                <td>Mercado Pago</td>
+                                <td class="num fw-600 text-negative">$3.500</td>
+                            </tr>
+                            <tr>
+                                <td>27/04/2026</td>
+                                <td><span class="badge badge-neutral">Envíos</span></td>
+                                <td>Correo Argentino — 5 paquetes</td>
+                                <td>Efectivo</td>
+                                <td class="num fw-600 text-negative">$2.500</td>
+                            </tr>
+                            <tr>
+                                <td>25/04/2026</td>
+                                <td><span class="badge badge-neutral">Packaging</span></td>
+                                <td>Cajas y papel de seda — proveedor X</td>
+                                <td>Banco</td>
+                                <td class="num fw-600 text-negative">$4.200</td>
+                            </tr>
+                            <tr>
+                                <td>22/04/2026</td>
+                                <td><span class="badge badge-neutral">Marketing</span></td>
+                                <td>Diseño gráfico — stories y reels</td>
+                                <td>Mercado Pago</td>
+                                <td class="num fw-600 text-negative">$3.000</td>
+                            </tr>
+                            <tr>
+                                <td>20/04/2026</td>
+                                <td><span class="badge badge-neutral">Alquiler</span></td>
+                                <td>Puesto feria mensual</td>
+                                <td>Efectivo</td>
+                                <td class="num fw-600 text-negative">$4.000</td>
+                            </tr>
+                            <tr>
+                                <td>18/04/2026</td>
+                                <td><span class="badge badge-neutral">Packaging</span></td>
+                                <td>Etiquetas personalizadas x500</td>
+                                <td>Banco</td>
+                                <td class="num fw-600 text-negative">$2.800</td>
+                            </tr>
+                            <tr>
+                                <td>15/04/2026</td>
+                                <td><span class="badge badge-neutral">Marketing</span></td>
+                                <td>Publicidad Facebook</td>
+                                <td>Mercado Pago</td>
+                                <td class="num fw-600 text-negative">$2.500</td>
+                            </tr>
+                            <tr>
+                                <td>12/04/2026</td>
+                                <td><span class="badge badge-neutral">Envíos</span></td>
+                                <td>Envíos semana 2</td>
+                                <td>Efectivo</td>
+                                <td class="num fw-600 text-negative">$1.800</td>
+                            </tr>
+                            <tr>
+                                <td>10/04/2026</td>
+                                <td><span class="badge badge-neutral">Servicios</span></td>
+                                <td>Internet + celular</td>
+                                <td>Banco</td>
+                                <td class="num fw-600 text-negative">$3.200</td>
+                            </tr>
+                            <tr>
+                                <td>08/04/2026</td>
+                                <td><span class="badge badge-neutral">Herramientas</span></td>
+                                <td>Termómetro digital para cera</td>
+                                <td>Mercado Pago</td>
+                                <td class="num fw-600 text-negative">$1.500</td>
+                            </tr>
+                            <tr>
+                                <td>05/04/2026</td>
+                                <td><span class="badge badge-neutral">Marketing</span></td>
+                                <td>Sesión de fotos productos</td>
+                                <td>Efectivo</td>
+                                <td class="num fw-600 text-negative">$3.000</td>
+                            </tr>
+                            <tr>
+                                <td>02/04/2026</td>
+                                <td><span class="badge badge-neutral">Envíos</span></td>
+                                <td>Envíos semana 1</td>
+                                <td>Efectivo</td>
+                                <td class="num fw-600 text-negative">$1.900</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nuevo Gasto -->
+    <div class="modal-overlay" id="modal-gasto">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nuevo Gasto</h2>
+                <button class="modal-close" onclick="closeModal('modal-gasto')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                    <div class="form-group">
+                        <label>Monto ($)</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select>
+                            <option value="">Seleccionar...</option>
+                            <option>Marketing</option>
+                            <option>Packaging</option>
+                            <option>Envíos</option>
+                            <option>Alquiler</option>
+                            <option>Servicios</option>
+                            <option>Herramientas</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuenta de Pago</label>
+                        <select>
+                            <option>Efectivo</option>
+                            <option>Banco</option>
+                            <option>Mercado Pago</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea placeholder="Descripción del gasto..."></textarea>
+                </div>
+                <div
+                    style="background:var(--color-bg-secondary); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-text-secondary);">
+                    Se generará un movimiento de caja (egreso) automáticamente.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-gasto')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-gasto'); showToast('✓ Gasto registrado — egreso de caja generado')">Registrar
+                    Gasto</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script>initPage('gastos', 'Gastos', 'Gastos operativos');</script>
+</body>
+
+</html>

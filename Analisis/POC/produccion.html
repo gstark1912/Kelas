@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas - Producción</title>
+    <link rel="icon" href="kelas.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar"></aside>
+        <main class="main-area">
+            <header class="topbar"></header>
+            <div class="content">
+
+                <div class="page-header">
+                    <h1>Producción</h1>
+                    <button class="btn btn-primary" onclick="openModal('modal-produccion')">+ Nueva Producción</button>
+                </div>
+
+                <div class="filters-bar">
+                    <select>
+                        <option value="">Todos los productos</option>
+                        <option>Vela Vainilla 200gr</option>
+                        <option>Vela Lavanda 150gr</option>
+                        <option>Vela Canela 200gr</option>
+                        <option>Set Regalo x3</option>
+                        <option>Difusor Vainilla</option>
+                    </select>
+                    <input type="date" value="2026-04-01"> <span class="text-muted">a</span> <input type="date"
+                        value="2026-04-28">
+                </div>
+
+                <!-- KPIs -->
+                <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Tandas del Mes</div>
+                        <div class="kpi-value">14</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Unidades Producidas</div>
+                        <div class="kpi-value">126</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Costo Total</div>
+                        <div class="kpi-value">$198.400</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Costo Promedio/u</div>
+                        <div class="kpi-value">$1.575</div>
+                    </div>
+                </div>
+
+                <!-- Production log -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th class="num">Cantidad</th>
+                                <th class="num">Costo Total</th>
+                                <th class="num">Costo Unit.</th>
+                                <th>Notas</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-muted">#14</td>
+                                <td>27/04/2026</td>
+                                <td class="fw-600">Vela Vainilla 200gr</td>
+                                <td class="num">10</td>
+                                <td class="num">$18.000</td>
+                                <td class="num">$1.800</td>
+                                <td class="text-secondary">Tanda para feria mayo</td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#13</td>
+                                <td>25/04/2026</td>
+                                <td class="fw-600">Vela Canela 200gr</td>
+                                <td class="num">8</td>
+                                <td class="num">$12.600</td>
+                                <td class="num">$1.575</td>
+                                <td class="text-secondary"></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#12</td>
+                                <td>22/04/2026</td>
+                                <td class="fw-600">Vela Vainilla 200gr</td>
+                                <td class="num">15</td>
+                                <td class="num">$27.000</td>
+                                <td class="num">$1.800</td>
+                                <td class="text-secondary">Pedido grande Instagram</td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#11</td>
+                                <td>20/04/2026</td>
+                                <td class="fw-600">Set Regalo x3</td>
+                                <td class="num">5</td>
+                                <td class="num">$16.150</td>
+                                <td class="num">$3.230</td>
+                                <td class="text-secondary">Para Día de la Madre</td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#10</td>
+                                <td>18/04/2026</td>
+                                <td class="fw-600">Vela Lavanda 150gr</td>
+                                <td class="num">12</td>
+                                <td class="num">$16.800</td>
+                                <td class="num">$1.400</td>
+                                <td class="text-secondary"></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#9</td>
+                                <td>15/04/2026</td>
+                                <td class="fw-600">Difusor Vainilla</td>
+                                <td class="num">10</td>
+                                <td class="num">$26.000</td>
+                                <td class="num">$2.600</td>
+                                <td class="text-secondary"></td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">#8</td>
+                                <td>12/04/2026</td>
+                                <td class="fw-600">Vela Vainilla 200gr</td>
+                                <td class="num">20</td>
+                                <td class="num">$36.000</td>
+                                <td class="num">$1.800</td>
+                                <td class="text-secondary">Reposición stock</td>
+                                <td><button class="btn btn-sm" onclick="openModal('modal-detalle-prod')">Ver</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nueva Producción -->
+    <div class="modal-overlay" id="modal-produccion">
+        <div class="modal" style="width:600px;">
+            <div class="modal-header">
+                <h2>Nueva Producción</h2>
+                <button class="modal-close" onclick="closeModal('modal-produccion')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Producto</label>
+                    <select id="prod-select" onchange="updateMPNeeded()">
+                        <option value="">Seleccionar producto...</option>
+                        <option value="vainilla">Vela Vainilla 200gr</option>
+                        <option value="lavanda">Vela Lavanda 150gr</option>
+                        <option value="canela">Vela Canela 200gr</option>
+                        <option value="set">Set Regalo x3</option>
+                        <option value="difusor">Difusor Vainilla</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cantidad a Producir</label>
+                        <input type="number" id="prod-qty" placeholder="0" min="1" value="10"
+                            oninput="updateMPNeeded()">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                </div>
+
+                <!-- MP needed preview -->
+                <div id="mp-preview" style="display:none;">
+                    <div
+                        style="font-size:0.82rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:8px;">
+                        Materia prima necesaria:</div>
+                    <table style="font-size:0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Ingrediente</th>
+                                <th class="num">Necesario</th>
+                                <th class="num">Stock</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mp-table-body"></tbody>
+                    </table>
+                    <div
+                        style="margin-top:12px; padding:10px 14px; background:var(--color-bg-secondary); border-radius:var(--radius); font-size:0.82rem;">
+                        Costo estimado: <strong id="cost-estimate">$18.000</strong> — Costo unitario: <strong
+                            id="cost-unit">$1.800</strong>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:16px;">
+                    <label>Notas</label>
+                    <textarea placeholder="Notas sobre esta tanda..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-produccion')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-produccion'); showToast('✓ Producción registrada — stock actualizado')">Registrar
+                    Producción</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Detalle Producción -->
+    <div class="modal-overlay" id="modal-detalle-prod">
+        <div class="modal" style="width:600px;">
+            <div class="modal-header">
+                <h2>Producción #14 — Vela Vainilla 200gr</h2>
+                <button class="modal-close" onclick="closeModal('modal-detalle-prod')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row mb-16">
+                    <div><span class="text-secondary">Fecha:</span> 27/04/2026</div>
+                    <div><span class="text-secondary">Cantidad:</span> <strong>10 unidades</strong></div>
+                </div>
+
+                <div style="font-size:0.82rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:8px;">
+                    Consumo de materia prima:</div>
+                <table style="font-size:0.85rem;">
+                    <thead>
+                        <tr>
+                            <th>Ingrediente</th>
+                            <th class="num">Cantidad</th>
+                            <th class="num">Precio Unit.</th>
+                            <th class="num">Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cera de Soja</td>
+                            <td class="num">1.800 gr</td>
+                            <td class="num">$5,00/gr</td>
+                            <td class="num">$9.000</td>
+                        </tr>
+                        <tr>
+                            <td>Fragancia Vainilla</td>
+                            <td class="num">200 gr</td>
+                            <td class="num">$15,00/gr</td>
+                            <td class="num">$3.000</td>
+                        </tr>
+                        <tr>
+                            <td>Mecha Algodón</td>
+                            <td class="num">10 u</td>
+                            <td class="num">$200/u</td>
+                            <td class="num">$2.000</td>
+                        </tr>
+                        <tr>
+                            <td>Frasco Vidrio 200ml</td>
+                            <td class="num">10 u</td>
+                            <td class="num">$400/u</td>
+                            <td class="num">$4.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div
+                    style="text-align:right; margin-top:14px; padding-top:14px; border-top:1px solid var(--color-border);">
+                    <span class="text-secondary">Costo total:</span> <strong style="font-size:1.05rem;">$18.000</strong>
+                    <span class="text-muted" style="margin-left:12px;">($1.800/u)</span>
+                </div>
+                <div style="margin-top:10px; font-size:0.85rem; color:var(--color-text-secondary);">
+                    Notas: Tanda para feria mayo
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-detalle-prod')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script>
+        initPage('produccion', 'Producción', 'Registro de tandas');
+
+        function updateMPNeeded() {
+            const product = document.getElementById('prod-select').value;
+            const qty = parseInt(document.getElementById('prod-qty').value) || 0;
+            const preview = document.getElementById('mp-preview');
+            const tbody = document.getElementById('mp-table-body');
+
+            if (!product || qty <= 0) { preview.style.display = 'none'; return; }
+            preview.style.display = 'block';
+
+            const recipes = {
+                vainilla: [
+                    { name: 'Cera de Soja', per: 180, unit: 'gr', stock: 4200, price: 5 },
+                    { name: 'Fragancia Vainilla', per: 20, unit: 'gr', stock: 380, price: 15 },
+                    { name: 'Mecha Algodón', per: 1, unit: 'u', stock: 85, price: 200 },
+                    { name: 'Frasco Vidrio 200ml', per: 1, unit: 'u', stock: 32, price: 400 },
+                ],
+                lavanda: [
+                    { name: 'Cera de Soja', per: 130, unit: 'gr', stock: 4200, price: 5 },
+                    { name: 'Fragancia Lavanda', per: 15, unit: 'gr', stock: 150, price: 14 },
+                    { name: 'Mecha Algodón', per: 1, unit: 'u', stock: 85, price: 200 },
+                    { name: 'Frasco Vidrio 150ml', per: 1, unit: 'u', stock: 0, price: 350 },
+                ],
+                canela: [
+                    { name: 'Cera de Soja', per: 180, unit: 'gr', stock: 4200, price: 5 },
+                    { name: 'Fragancia Canela', per: 20, unit: 'gr', stock: 520, price: 16 },
+                    { name: 'Mecha Algodón', per: 1, unit: 'u', stock: 85, price: 200 },
+                    { name: 'Frasco Vidrio 200ml', per: 1, unit: 'u', stock: 32, price: 400 },
+                ],
+                set: [
+                    { name: 'Cera de Soja', per: 490, unit: 'gr', stock: 4200, price: 5 },
+                    { name: 'Fragancia Vainilla', per: 20, unit: 'gr', stock: 380, price: 15 },
+                    { name: 'Fragancia Lavanda', per: 15, unit: 'gr', stock: 150, price: 14 },
+                    { name: 'Fragancia Canela', per: 20, unit: 'gr', stock: 520, price: 16 },
+                    { name: 'Mecha Algodón', per: 3, unit: 'u', stock: 85, price: 200 },
+                    { name: 'Frasco Vidrio 200ml', per: 2, unit: 'u', stock: 32, price: 400 },
+                    { name: 'Frasco Vidrio 150ml', per: 1, unit: 'u', stock: 0, price: 350 },
+                ],
+                difusor: [
+                    { name: 'Aceite Esencial Vainilla', per: 100, unit: 'ml', stock: 200, price: 25 },
+                    { name: 'Frasco Vidrio 200ml', per: 1, unit: 'u', stock: 32, price: 400 },
+                ],
+            };
+
+            const recipe = recipes[product] || [];
+            let totalCost = 0;
+            tbody.innerHTML = recipe.map(r => {
+                const needed = r.per * qty;
+                const ok = r.stock >= needed;
+                totalCost += needed * r.price;
+                return `<tr>
+        <td>${r.name}</td>
+        <td class="num">${needed.toLocaleString()} ${r.unit}</td>
+        <td class="num">${r.stock.toLocaleString()} ${r.unit}</td>
+        <td>${ok ? '<span class="badge badge-positive">OK</span>' : '<span class="badge badge-negative">Faltante</span>'}</td>
+      </tr>`;
+            }).join('');
+
+            document.getElementById('cost-estimate').textContent = '$' + totalCost.toLocaleString('es-AR');
+            document.getElementById('cost-unit').textContent = '$' + Math.round(totalCost / qty).toLocaleString('es-AR');
+        }
+    </script>
+</body>
+
+</html>

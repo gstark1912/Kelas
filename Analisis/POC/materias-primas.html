@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas - Materias Primas</title>
+    <link rel="icon" href="kelas.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar"></aside>
+        <main class="main-area">
+            <header class="topbar"></header>
+            <div class="content">
+
+                <div class="page-header">
+                    <h1>Materias Primas</h1>
+                    <div class="flex gap-8">
+                        <button class="btn" onclick="openModal('modal-compra')">Registrar Compra</button>
+                        <button class="btn btn-primary" onclick="openModal('modal-nueva-mp')">+ Nueva Materia
+                            Prima</button>
+                    </div>
+                </div>
+
+                <div class="filters-bar">
+                    <input type="text" placeholder="Buscar materia prima..." style="width:240px;">
+                    <select>
+                        <option value="">Todas las unidades</option>
+                        <option>gr</option>
+                        <option>ml</option>
+                        <option>unidad</option>
+                    </select>
+                </div>
+
+                <!-- Stock table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Materia Prima</th>
+                                <th>Unidad</th>
+                                <th class="num">Stock Actual</th>
+                                <th class="num">Precio Vigente</th>
+                                <th>Estado</th>
+                                <th class="num">Última Compra</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-600">Cera de Soja</td>
+                                <td>gr</td>
+                                <td class="num">4.200</td>
+                                <td class="num">$5,00/gr</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">22/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Fragancia Vainilla</td>
+                                <td>gr</td>
+                                <td class="num">380</td>
+                                <td class="num">$15,00/gr</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">18/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Fragancia Lavanda</td>
+                                <td>gr</td>
+                                <td class="num">150</td>
+                                <td class="num">$14,00/gr</td>
+                                <td><span class="badge badge-warning">Bajo</span></td>
+                                <td class="num">10/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Fragancia Canela</td>
+                                <td>gr</td>
+                                <td class="num">520</td>
+                                <td class="num">$16,00/gr</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">15/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Mecha Algodón</td>
+                                <td>unidad</td>
+                                <td class="num">85</td>
+                                <td class="num">$200/u</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">20/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Frasco Vidrio 200ml</td>
+                                <td>unidad</td>
+                                <td class="num">32</td>
+                                <td class="num">$400/u</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">12/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Frasco Vidrio 150ml</td>
+                                <td>unidad</td>
+                                <td class="num">0</td>
+                                <td class="num">$350/u</td>
+                                <td><span class="badge badge-negative">Sin stock</span></td>
+                                <td class="num">05/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-600">Aceite Esencial Vainilla</td>
+                                <td>ml</td>
+                                <td class="num">200</td>
+                                <td class="num">$25,00/ml</td>
+                                <td><span class="badge badge-positive">OK</span></td>
+                                <td class="num">08/04/2026</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="openModal('modal-historial')">Historial</button>
+                                    <button class="btn btn-sm" onclick="openModal('modal-ajuste')">Ajustar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nueva MP -->
+    <div class="modal-overlay" id="modal-nueva-mp">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nueva Materia Prima</h2>
+                <button class="modal-close" onclick="closeModal('modal-nueva-mp')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" placeholder="Ej: Cera de Soja">
+                </div>
+                <div class="form-group">
+                    <label>Unidad de Medida</label>
+                    <select>
+                        <option value="">Seleccionar...</option>
+                        <option>gr</option>
+                        <option>kg</option>
+                        <option>ml</option>
+                        <option>lt</option>
+                        <option>unidad</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-nueva-mp')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-nueva-mp'); showToast('✓ Materia prima creada — stock inicial: 0')">Crear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Registrar Compra -->
+    <div class="modal-overlay" id="modal-compra">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Registrar Compra de MP</h2>
+                <button class="modal-close" onclick="closeModal('modal-compra')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Materia Prima</label>
+                    <select>
+                        <option value="">Seleccionar...</option>
+                        <option>Cera de Soja</option>
+                        <option>Fragancia Vainilla</option>
+                        <option>Fragancia Lavanda</option>
+                        <option>Fragancia Canela</option>
+                        <option>Mecha Algodón</option>
+                        <option>Frasco Vidrio 200ml</option>
+                        <option>Frasco Vidrio 150ml</option>
+                        <option>Aceite Esencial Vainilla</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Total ($)</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                    <div class="form-group">
+                        <label>Cuenta de Pago</label>
+                        <select>
+                            <option>Efectivo</option>
+                            <option>Banco</option>
+                            <option>Mercado Pago</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Proveedor (opcional)</label>
+                    <input type="text" placeholder="Nombre del proveedor">
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea placeholder="Notas adicionales..."></textarea>
+                </div>
+                <div
+                    style="background:var(--color-bg-secondary); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-text-secondary);">
+                    Precio por unidad calculado: <strong>se calcula automáticamente</strong><br>
+                    Se generará movimiento de caja (egreso) y se actualizará el stock.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-compra')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-compra'); showToast('✓ Compra registrada — stock y caja actualizados')">Registrar
+                    Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Ajuste de Stock -->
+    <div class="modal-overlay" id="modal-ajuste">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Ajuste de Stock</h2>
+                <button class="modal-close" onclick="closeModal('modal-ajuste')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo de Ajuste</label>
+                        <select>
+                            <option value="">Seleccionar...</option>
+                            <option>Vencimiento (-)</option>
+                            <option>Rotura (-)</option>
+                            <option>Pérdida (-)</option>
+                            <option>Corrección inventario (+/-)</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad (+/-)</label>
+                        <input type="number" placeholder="Ej: -200">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" value="2026-04-28">
+                </div>
+                <div class="form-group">
+                    <label>Motivo / Notas</label>
+                    <textarea placeholder="Describir el motivo del ajuste..."></textarea>
+                </div>
+                <div
+                    style="background:var(--color-warning-bg); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-warning);">
+                    ⚠ Este ajuste no genera movimiento de caja. Solo afecta el stock físico.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-ajuste')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-ajuste'); showToast('✓ Ajuste de stock registrado')">Confirmar
+                    Ajuste</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Historial de Movimientos -->
+    <div class="modal-overlay" id="modal-historial">
+        <div class="modal" style="width:680px;">
+            <div class="modal-header">
+                <h2>Historial — Cera de Soja</h2>
+                <button class="modal-close" onclick="closeModal('modal-historial')">✕</button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th class="num">Cantidad</th>
+                            <th class="num">Saldo</th>
+                            <th>Origen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/04</td>
+                            <td><span class="badge badge-positive">Compra</span></td>
+                            <td class="num text-positive">+2.000gr</td>
+                            <td class="num">2.000</td>
+                            <td><a href="#">Compra #12</a></td>
+                        </tr>
+                        <tr>
+                            <td>05/04</td>
+                            <td><span class="badge badge-neutral">Producción</span></td>
+                            <td class="num text-negative">-900gr</td>
+                            <td class="num">1.100</td>
+                            <td><a href="produccion.html">Producción #8</a></td>
+                        </tr>
+                        <tr>
+                            <td>12/04</td>
+                            <td><span class="badge badge-neutral">Producción</span></td>
+                            <td class="num text-negative">-1.080gr</td>
+                            <td class="num">20</td>
+                            <td><a href="produccion.html">Producción #10</a></td>
+                        </tr>
+                        <tr>
+                            <td>15/04</td>
+                            <td><span class="badge badge-positive">Compra</span></td>
+                            <td class="num text-positive">+5.000gr</td>
+                            <td class="num">5.020</td>
+                            <td><a href="#">Compra #15</a></td>
+                        </tr>
+                        <tr>
+                            <td>22/04</td>
+                            <td><span class="badge badge-neutral">Producción</span></td>
+                            <td class="num text-negative">-1.620gr</td>
+                            <td class="num">3.400</td>
+                            <td><a href="produccion.html">Producción #14</a></td>
+                        </tr>
+                        <tr>
+                            <td>25/04</td>
+                            <td><span class="badge badge-negative">Ajuste</span></td>
+                            <td class="num text-negative">-200gr</td>
+                            <td class="num">3.200</td>
+                            <td>Vencimiento</td>
+                        </tr>
+                        <tr>
+                            <td>27/04</td>
+                            <td><span class="badge badge-positive">Compra</span></td>
+                            <td class="num text-positive">+1.000gr</td>
+                            <td class="num">4.200</td>
+                            <td><a href="#">Compra #18</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div
+                    style="text-align:right; margin-top:14px; padding-top:14px; border-top:1px solid var(--color-border);">
+                    <span class="text-secondary">Saldo actual:</span>
+                    <span class="fw-600" style="font-size:1.05rem; margin-left:8px;">4.200 gr</span>
+                    <span class="badge badge-positive" style="margin-left:8px;">✓ Consistente</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-historial')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script>initPage('materias-primas', 'Materias Primas', 'Stock e insumos');</script>
+</body>
+
+</html>

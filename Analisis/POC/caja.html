@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas - Caja</title>
+    <link rel="icon" href="kelas.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar"></aside>
+        <main class="main-area">
+            <header class="topbar"></header>
+            <div class="content">
+
+                <div class="page-header">
+                    <h1>Caja</h1>
+                    <div class="flex gap-8">
+                        <button class="btn" onclick="openModal('modal-transferencia')">Transferencia entre
+                            cuentas</button>
+                        <button class="btn btn-primary" onclick="openModal('modal-movimiento')">+ Nuevo
+                            Movimiento</button>
+                    </div>
+                </div>
+
+                <!-- Account cards -->
+                <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="kpi-card" style="border-left: 3px solid var(--color-primary);">
+                        <div class="kpi-label">Efectivo</div>
+                        <div class="kpi-value">$45.300</div>
+                        <div class="kpi-sub">Último mov: 28/04</div>
+                    </div>
+                    <div class="kpi-card" style="border-left: 3px solid #2d7a3a;">
+                        <div class="kpi-label">Banco</div>
+                        <div class="kpi-value">$82.150</div>
+                        <div class="kpi-sub">Último mov: 27/04</div>
+                    </div>
+                    <div class="kpi-card" style="border-left: 3px solid #0ea5e9;">
+                        <div class="kpi-label">Mercado Pago</div>
+                        <div class="kpi-value">$28.700</div>
+                        <div class="kpi-sub">Último mov: 28/04</div>
+                    </div>
+                    <div class="kpi-card kpi-positive" style="border-left: 3px solid var(--color-positive);">
+                        <div class="kpi-label">Saldo Total</div>
+                        <div class="kpi-value">$156.150</div>
+                        <div class="kpi-sub">3 cuentas activas</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <select id="filter-cuenta" onchange="filterMovimientos()">
+                        <option value="">Todas las cuentas</option>
+                        <option>Efectivo</option>
+                        <option>Banco</option>
+                        <option>Mercado Pago</option>
+                    </select>
+                    <select id="filter-tipo">
+                        <option value="">Ingresos y Egresos</option>
+                        <option>Ingreso</option>
+                        <option>Egreso</option>
+                    </select>
+                    <select id="filter-origen">
+                        <option value="">Todos los orígenes</option>
+                        <option>Automático</option>
+                        <option>Manual</option>
+                    </select>
+                    <input type="date" value="2026-04-01"> <span class="text-muted">a</span> <input type="date"
+                        value="2026-04-28">
+                </div>
+
+                <!-- Summary bar -->
+                <div style="display:flex; gap:24px; margin-bottom:20px; font-size:0.88rem;">
+                    <div><span class="text-secondary">Total ingresos:</span> <span
+                            class="fw-600 text-positive">$198.500</span></div>
+                    <div><span class="text-secondary">Total egresos:</span> <span
+                            class="fw-600 text-negative">$87.200</span></div>
+                    <div><span class="text-secondary">Neto período:</span> <span
+                            class="fw-600 text-positive">+$111.300</span></div>
+                </div>
+
+                <!-- Movements table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Cuenta</th>
+                                <th>Tipo</th>
+                                <th>Concepto</th>
+                                <th>Origen</th>
+                                <th class="num">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>28/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #42 — Feria</td>
+                                <td><a href="ventas.html">Venta #42</a></td>
+                                <td class="num fw-600 text-positive">+$9.300</td>
+                            </tr>
+                            <tr>
+                                <td>28/04</td>
+                                <td>Mercado Pago</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Gasto — Promoción Instagram</td>
+                                <td><a href="gastos.html">Gasto</a></td>
+                                <td class="num fw-600 text-negative">-$3.500</td>
+                            </tr>
+                            <tr>
+                                <td>27/04</td>
+                                <td>Mercado Pago</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #41 — Instagram</td>
+                                <td><a href="ventas.html">Venta #41</a></td>
+                                <td class="num fw-600 text-positive">+$10.500</td>
+                            </tr>
+                            <tr>
+                                <td>27/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Compra MP — Cera de Soja 1kg</td>
+                                <td><a href="materias-primas.html">Compra #18</a></td>
+                                <td class="num fw-600 text-negative">-$5.000</td>
+                            </tr>
+                            <tr>
+                                <td>27/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Gasto — Envíos 5 paquetes</td>
+                                <td><a href="gastos.html">Gasto</a></td>
+                                <td class="num fw-600 text-negative">-$2.500</td>
+                            </tr>
+                            <tr>
+                                <td>26/04</td>
+                                <td>Banco</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #40 — WhatsApp</td>
+                                <td><a href="ventas.html">Venta #40</a></td>
+                                <td class="num fw-600 text-positive">+$8.500</td>
+                            </tr>
+                            <tr>
+                                <td>25/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #39 — Feria</td>
+                                <td><a href="ventas.html">Venta #39</a></td>
+                                <td class="num fw-600 text-positive">+$19.600</td>
+                            </tr>
+                            <tr>
+                                <td>25/04</td>
+                                <td>Banco</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Gasto — Cajas y papel de seda</td>
+                                <td><a href="gastos.html">Gasto</a></td>
+                                <td class="num fw-600 text-negative">-$4.200</td>
+                            </tr>
+                            <tr>
+                                <td>24/04</td>
+                                <td>Mercado Pago</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #38 — Instagram</td>
+                                <td><a href="ventas.html">Venta #38</a></td>
+                                <td class="num fw-600 text-positive">+$8.400</td>
+                            </tr>
+                            <tr>
+                                <td>23/04</td>
+                                <td>Banco</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Aporte de capital</td>
+                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td class="num fw-600 text-positive">+$20.000</td>
+                            </tr>
+                            <tr>
+                                <td>22/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Venta #37 — Local</td>
+                                <td><a href="ventas.html">Venta #37</a></td>
+                                <td class="num fw-600 text-positive">+$7.000</td>
+                            </tr>
+                            <tr>
+                                <td>22/04</td>
+                                <td>Mercado Pago</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Gasto — Diseño gráfico</td>
+                                <td><a href="gastos.html">Gasto</a></td>
+                                <td class="num fw-600 text-negative">-$3.000</td>
+                            </tr>
+                            <tr>
+                                <td>21/04</td>
+                                <td>Efectivo</td>
+                                <td><span class="badge badge-negative">Egreso</span></td>
+                                <td>Transferencia a Banco</td>
+                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td class="num fw-600 text-negative">-$15.000</td>
+                            </tr>
+                            <tr>
+                                <td>21/04</td>
+                                <td>Banco</td>
+                                <td><span class="badge badge-positive">Ingreso</span></td>
+                                <td>Transferencia desde Efectivo</td>
+                                <td><span class="badge badge-neutral">Manual</span></td>
+                                <td class="num fw-600 text-positive">+$15.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nuevo Movimiento -->
+    <div class="modal-overlay" id="modal-movimiento">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nuevo Movimiento Manual</h2>
+                <button class="modal-close" onclick="closeModal('modal-movimiento')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select>
+                            <option>Ingreso</option>
+                            <option>Egreso</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuenta</label>
+                        <select>
+                            <option>Efectivo</option>
+                            <option>Banco</option>
+                            <option>Mercado Pago</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monto ($)</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Concepto</label>
+                    <select>
+                        <option value="">Seleccionar...</option>
+                        <option>Retiro de efectivo</option>
+                        <option>Aporte de capital</option>
+                        <option>Ajuste de saldo</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea placeholder="Detalle del movimiento..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-movimiento')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-movimiento'); showToast('✓ Movimiento registrado')">Registrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Transferencia -->
+    <div class="modal-overlay" id="modal-transferencia">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Transferencia entre Cuentas</h2>
+                <button class="modal-close" onclick="closeModal('modal-transferencia')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cuenta Origen</label>
+                        <select>
+                            <option>Efectivo ($45.300)</option>
+                            <option>Banco ($82.150)</option>
+                            <option>Mercado Pago ($28.700)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"
+                        style="display:flex; align-items:flex-end; justify-content:center; max-width:40px; padding-bottom:10px;">
+                        <span style="font-size:1.2rem;">→</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuenta Destino</label>
+                        <select>
+                            <option>Banco ($82.150)</option>
+                            <option>Efectivo ($45.300)</option>
+                            <option>Mercado Pago ($28.700)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monto ($)</label>
+                        <input type="number" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" value="2026-04-28">
+                    </div>
+                </div>
+                <div
+                    style="background:var(--color-bg-secondary); padding:10px 14px; border-radius:var(--radius); font-size:0.82rem; color:var(--color-text-secondary);">
+                    Se generarán 2 movimientos vinculados: egreso en origen e ingreso en destino.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal-transferencia')">Cancelar</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('modal-transferencia'); showToast('✓ Transferencia registrada — 2 movimientos generados')">Transferir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script>
+        initPage('caja', 'Caja', 'Cuentas y movimientos');
+
+        function filterMovimientos() {
+            // Placeholder for filter interaction
+            showToast('Filtros aplicados');
+        }
+    </script>
+</body>
+
+</html>
