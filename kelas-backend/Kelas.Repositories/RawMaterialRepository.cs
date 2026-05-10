@@ -43,6 +43,12 @@ public class RawMaterialRepository : IRawMaterialRepository
         return await _collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
     }
 
+    public async Task<List<RawMaterial>> GetByIdsAsync(IEnumerable<ObjectId> ids)
+    {
+        var filter = Builders<RawMaterial>.Filter.In(x => x.Id, ids);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
     public async Task<RawMaterial?> GetByNameAsync(string name)
     {
         var escapedName = System.Text.RegularExpressions.Regex.Escape(name);

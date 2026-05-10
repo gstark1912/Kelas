@@ -40,7 +40,7 @@ const router = useRouter()
 const auth = useAuthStore()
 
 const operationItems = [
-  { path: '/products', label: 'Productos', icon: '🏷️', enabled: false },
+  { path: '/products', label: 'Productos', icon: '🏷️', enabled: true },
   { path: '/raw-materials', label: 'Materias Primas', icon: '🧱', enabled: true },
   { path: '/production', label: 'Producción', icon: '⚙️', enabled: false },
   { path: '/sales', label: 'Ventas', icon: '💰', enabled: false },

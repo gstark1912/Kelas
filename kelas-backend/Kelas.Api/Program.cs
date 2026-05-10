@@ -83,6 +83,9 @@ using (var scope = app.Services.CreateScope())
 
     var rawMaterialPriceRepo = scope.ServiceProvider.GetRequiredService<IRawMaterialPriceRepository>();
     await rawMaterialPriceRepo.EnsureIndexesAsync();
+
+    var productRepo = scope.ServiceProvider.GetRequiredService<IProductRepository>();
+    await productRepo.EnsureIndexesAsync();
 }
 
 app.Run();

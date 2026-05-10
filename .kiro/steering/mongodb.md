@@ -217,6 +217,45 @@ public async Task<List<CategoryTotal>> GetExpensesByCategoryAsync(DateTime from,
 }
 ```
 
+## Queries por Lote con `$in` (OBLIGATORIO)
+
+**Nunca hacer un loop de queries individuales cuando se necesitan múltiples documentos por id.** Usar siempre una sola query con el operador `$in`.
+
+### ❌ MAL — N queries al repositorio (una por id)
+
+```csharp
+// NUNCA hacer esto
+foreach (var item in recipe)
+{
+    var rawMaterial = await _rawMaterialRepository.GetByIdAsync(item.RawMaterialId.ToString());
+    // ...
+}
+```
+
+### ✅ BIEN — Una sola query con $in
+
+```csharp
+// Agregar al repositorio
+public async Task<List<RawMaterial>> GetByIdsAsync(IEnumerable<ObjectId> ids)
+{
+    var filter = Builders<RawMaterial>.Filter.In(x => x.Id, ids);
+    return await _collection.Find(filter).ToListAsync();
+}
+
+// Usar en el servicio
+var rawMaterialIds = recipe.Select(x => x.RawMaterialId).ToList();
+var rawMaterials = await _rawMaterialRepository.GetByIdsAsync(rawMaterialIds);
+var rawMaterialsDict = rawMaterials.ToDictionary(x => x.Id);
+
+// Luego iterar en memoria sobre el diccionario
+var estimatedCost = recipe.Sum(item =>
+    rawMaterialsDict.TryGetValue(item.RawMaterialId, out var rm)
+        ? item.Quantity * rm.LastPricePerUnit
+        : 0m);
+```
+
+Este patrón aplica a cualquier situación donde se necesiten múltiples documentos por id: recetas, lotes de producción, movimientos de stock, etc. La regla es: **una sola ida a la base de datos, luego operar en memoria con un diccionario**.
+
 ## Transacciones
 
 Para operaciones que afectan múltiples colecciones (ej: registrar compra → actualizar stock + crear movimiento + actualizar precio), usar transacciones de MongoDB:

@@ -1,0 +1,4 @@
+interface:
+  display_name: "QA Spec Tester"
+  short_description: "Valida specs del proyecto con QA manual"
+  default_prompt: "Use $qa-spec-tester para validar la siguiente spec con QA-AGENT.md."

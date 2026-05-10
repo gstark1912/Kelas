@@ -19,6 +19,12 @@ const routes = [
         name: 'raw-materials',
         component: () => import('@/views/RawMaterialsView.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/products',
+        name: 'products',
+        component: () => import('@/views/ProductsView.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 
