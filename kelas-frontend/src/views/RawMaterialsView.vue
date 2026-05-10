@@ -47,8 +47,8 @@
       <template #actions="{ row }">
         <div class="action-buttons">
           <button class="btn btn-sm btn-primary" @click="openPurchaseModal(row)">Comprar</button>
-          <button class="btn btn-sm" disabled title="Disponible próximamente">Historial</button>
-          <button class="btn btn-sm" disabled title="Disponible próximamente">Ajustar</button>
+          <button class="btn btn-sm" @click="openMovementsModal(row)">Historial</button>
+          <button class="btn btn-sm btn-primary" @click="openAdjustmentModal(row)">Ajustar</button>
           <button class="btn btn-sm" @click="openEditModal(row)">Editar</button>
         </div>
       </template>
@@ -118,6 +118,21 @@
       @purchase-created="onPurchaseCreated"
     />
 
+    <!-- Adjustment Modal -->
+    <AdjustmentModal
+      :show="showAdjustmentModal"
+      :raw-material="selectedAdjustmentMaterial"
+      @close="closeAdjustmentModal"
+      @adjustment-created="onAdjustmentCreated"
+    />
+
+    <!-- Stock Movements Modal -->
+    <StockMovementsModal
+      :show="showMovementsModal"
+      :raw-material="selectedMovementsMaterial"
+      @close="closeMovementsModal"
+    />
+
     <!-- Toast -->
     <Transition name="toast">
       <div v-if="notification" class="toast show">
@@ -134,6 +149,8 @@ import AppModal from '@/components/common/AppModal.vue'
 import FormField from '@/components/common/FormField.vue'
 import rawMaterialService from '@/services/rawMaterialService'
 import PurchaseModal from '@/components/raw-materials/PurchaseModal.vue'
+import AdjustmentModal from '@/components/raw-materials/AdjustmentModal.vue'
+import StockMovementsModal from '@/components/raw-materials/StockMovementsModal.vue'
 
 // Constants
 const validUnits = ['gr', 'kg', 'ml', 'lt', 'unidad', 'cm']
@@ -158,6 +175,14 @@ let searchTimeout = null
 // Purchase modal state
 const showPurchaseModal = ref(false)
 const selectedRawMaterial = ref(null)
+
+// Adjustment modal state
+const showAdjustmentModal = ref(false)
+const selectedAdjustmentMaterial = ref(null)
+
+// Movements modal state
+const showMovementsModal = ref(false)
+const selectedMovementsMaterial = ref(null)
 
 // Modal state
 const showModal = ref(false)
@@ -310,6 +335,31 @@ function closePurchaseModal() {
 async function onPurchaseCreated() {
   showNotification('✓ Compra registrada exitosamente')
   await fetchMaterials()
+}
+
+function openAdjustmentModal(row) {
+  selectedAdjustmentMaterial.value = { id: row.id, name: row.name, currentQuantity: row.currentQuantity }
+  showAdjustmentModal.value = true
+}
+
+function closeAdjustmentModal() {
+  showAdjustmentModal.value = false
+  selectedAdjustmentMaterial.value = null
+}
+
+async function onAdjustmentCreated() {
+  showNotification('✓ Ajuste registrado exitosamente')
+  await fetchMaterials()
+}
+
+function openMovementsModal(row) {
+  selectedMovementsMaterial.value = { id: row.id, name: row.name }
+  showMovementsModal.value = true
+}
+
+function closeMovementsModal() {
+  showMovementsModal.value = false
+  selectedMovementsMaterial.value = null
 }
 
 function showNotification(message) {

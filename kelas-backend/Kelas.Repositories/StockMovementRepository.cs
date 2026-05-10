@@ -27,6 +27,15 @@ public class StockMovementRepository : IStockMovementRepository
         return entity;
     }
 
+    public async Task<List<StockMovement>> GetByItemAsync(string itemType, string itemId)
+    {
+        var objectId = MongoDB.Bson.ObjectId.Parse(itemId);
+        return await _collection
+            .Find(x => x.ItemType == itemType && x.ItemId == objectId)
+            .Sort(Builders<StockMovement>.Sort.Descending(x => x.Date))
+            .ToListAsync();
+    }
+
     public async Task EnsureIndexesAsync()
     {
         var indexModels = new List<CreateIndexModel<StockMovement>>
@@ -42,7 +51,8 @@ public class StockMovementRepository : IStockMovementRepository
                     .Ascending(x => x.ReferenceId)),
             new(
                 Builders<StockMovement>.IndexKeys
-                    .Descending(x => x.Date))
+                    .Descending(x => x.Date)),
+            new(Builders<StockMovement>.IndexKeys.Ascending(x => x.MovementType))
         };
 
         await _collection.Indexes.CreateManyAsync(indexModels);
