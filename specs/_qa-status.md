@@ -1,27 +1,23 @@
 # QA Status
 
 ## Estado actual
-- Ultima tarea revisada: `specs/01-infraestructura-base.md`
-- Estado: aprobada
+- Ultima tarea revisada: `specs/02-autenticacion.md`
+- Estado: rechazada
 - Fecha: 2026-05-10
 
 ## Resumen
-- La solución compila correctamente (5 proyectos: Domain, Repositories, Services, IoC.Resolver, Api).
-- El frontend compila sin errores (28 módulos, build exitoso).
-- `docker compose up --build` levanta los 3 servicios sin errores.
-- `GET /api/health` responde 200 con `{"status":"healthy","services":{"mongodb":"connected"}}`.
-- Frontend accesible en `http://localhost:3000` mostrando página base "Kelas".
-- MongoDB accesible y replica set inicializado correctamente.
-- Sin errores de consola en el frontend.
+- `POST /api/auth/login` con credenciales correctas retorna JWT.
+- `POST /api/auth/login` con credenciales incorrectas retorna 401 con mensaje de error.
+- `GET /api/auth/me` retorna 401 sin token y 200 con token válido.
+- `GET /api/auth/me` retorna 401 con token expirado.
+- El frontend redirige de `/` a `/login` cuando no hay token.
+- El formulario de login muestra error visible ante credenciales incorrectas.
+- El login exitoso guarda token en `localStorage` y navega a `/`.
+- Hallazgo: el guard del frontend permite acceder a `/` con un token inválido si existe cualquier valor en `localStorage.token`.
+- No se encontraron archivos/proyectos de tests de integración para los casos esperados por la spec.
 
 ## Bloqueos
 - Ninguno.
 
 ## Siguiente tarea sugerida
-- `specs/02-autenticacion.md`
-
-## Historial
-
-| Fecha | Spec | Estado |
-|-------|------|--------|
-| 2026-05-10 | `specs/01-infraestructura-base.md` | aprobada |
+- Reprobar `specs/02-autenticacion.md` luego de corregir la validación del token en el guard de rutas.

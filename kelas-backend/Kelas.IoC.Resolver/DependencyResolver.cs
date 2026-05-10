@@ -1,4 +1,6 @@
 using Kelas.Domain.Configuration;
+using Kelas.Domain.Interfaces.Services;
+using Kelas.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -26,6 +28,10 @@ public static class DependencyResolver
             return client.GetDatabase(settings.DatabaseName);
         });
 
+        // Auth Configuration
+        services.Configure<AuthSettings>(configuration.GetSection("Auth"));
+        services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+
         // Repositories
         AddRepositories(services);
 
@@ -42,6 +48,6 @@ public static class DependencyResolver
 
     private static void AddServices(IServiceCollection services)
     {
-        // Services will be registered here as they are created
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

@@ -1,12 +1,39 @@
+using System.Text;
 using Kelas.Api.Middleware;
+using Kelas.Domain.Configuration;
 using Kelas.IoC.Resolver;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Kelas services (MongoDB, Repositories, Services)
 builder.Services.AddKelasServices(builder.Configuration);
 
-// 2. CORS
+// 2. JWT Configuration
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
+    ?? throw new InvalidOperationException("La configuración 'Jwt' es requerida.");
+
+if (string.IsNullOrWhiteSpace(jwtSettings.Secret))
+    throw new InvalidOperationException("La configuración 'Jwt:Secret' es requerida y no puede estar vacía.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+// 3. CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -17,14 +44,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 3. Controllers
+// 4. Controllers
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// 4. Middleware pipeline
+// 5. Middleware pipeline
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

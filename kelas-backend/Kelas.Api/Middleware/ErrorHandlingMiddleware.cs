@@ -19,6 +19,11 @@ public class ErrorHandlingMiddleware
         {
             await _next(context);
         }
+        catch (UnauthorizedException ex)
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
         catch (BusinessException ex)
         {
             context.Response.StatusCode = 400;
