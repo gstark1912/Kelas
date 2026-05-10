@@ -1,252 +1,90 @@
-# Convenciones .NET — Kelas Backend
+---
+inclusion: fileMatch
+fileMatchPattern: ['**/kelas-backend/**/*.cs', '**/kelas-backend/**/*.csproj', '**/kelas-backend/**/*.sln']
+---
 
-## Arquitectura Multi-Proyecto
+# .NET Backend Conventions — Kelas
 
-El backend vive en `kelas-backend/` y está organizado en 5 proyectos con separación de responsabilidades:
+## Architecture
 
-```
-kelas-backend/
-├── Kelas.sln
-├── scripts/
-│   └── mongo-init.js
-├── Kelas.Api/                    # Web API — Entry point
-│   ├── Controllers/              # Controllers livianos, solo routing
-│   ├── Middleware/               # Error handling, logging
-│   ├── Properties/
-│   ├── Program.cs                # Configuración de host, CORS, pipeline
-│   ├── appsettings.json
-│   ├── Dockerfile
-│   └── railway.toml
-├── Kelas.Services/               # Lógica de negocio
-│   └── (implementaciones de servicios)
-├── Kelas.Repositories/           # Acceso a datos (MongoDB)
-│   └── (implementaciones de repositorios)
-├── Kelas.Domain/                 # Núcleo del dominio — sin dependencias
-│   ├── Configuration/            # MongoDbSettings, etc.
-│   ├── Entities/                 # Modelos de MongoDB
-│   ├── Exceptions/               # BusinessException, NotFoundException
-│   ├── Interfaces/
-│   │   ├── Repositories/         # Interfaces de repositorios
-│   │   └── Services/             # Interfaces de servicios
-│   └── Models/
-│       ├── Requests/             # DTOs de entrada
-│       └── Responses/            # DTOs de salida
-└── Kelas.IoC.Resolver/           # Composición de dependencias
-    └── DependencyResolver.cs     # Extension method AddKelasServices()
-```
+.NET 8 Web API in `kelas-backend/` with strict layered architecture across 5 projects. Nullable reference types and implicit usings are enabled globally.
 
-## Grafo de Dependencias
+### Project Dependency Rules
 
 ```
-Kelas.Api → Kelas.IoC.Resolver → Kelas.Services → Kelas.Domain
-         → Kelas.Domain                          
-                               → Kelas.Repositories → Kelas.Domain
+Kelas.Api → Kelas.IoC.Resolver, Kelas.Domain
+Kelas.IoC.Resolver → Kelas.Services, Kelas.Repositories, Kelas.Domain
+Kelas.Services → Kelas.Domain
+Kelas.Repositories → Kelas.Domain, MongoDB.Driver
+Kelas.Domain → (no project references)
 ```
 
-- **Kelas.Domain**: Sin referencias a otros proyectos Kelas. Solo define contratos.
-- **Kelas.Repositories**: Referencia a Domain. Implementa las interfaces de repositorios.
-- **Kelas.Services**: Referencia a Domain. Implementa las interfaces de servicios.
-- **Kelas.IoC.Resolver**: Referencia a Domain, Repositories y Services. Registra todo en DI.
-- **Kelas.Api**: Referencia a Domain (para DTOs/excepciones) y IoC.Resolver (para DI).
+| Project | Responsibility | Forbidden |
+|---------|---------------|-----------|
+| `Kelas.Domain` | Entities, interfaces, DTOs, exceptions, config classes | No project refs, no MongoDB.Driver |
+| `Kelas.Repositories` | MongoDB data access implementations | No business logic |
+| `Kelas.Services` | Business logic, validation, entity↔DTO mapping | No direct MongoDB access |
+| `Kelas.IoC.Resolver` | DI wiring via `AddKelasServices()` extension | No business logic |
+| `Kelas.Api` | Controllers, middleware, Program.cs | No direct repository references |
 
-## Responsabilidades por Proyecto
+## File Placement
 
-### Kelas.Domain
+When creating new code, place files exactly as follows:
 
-- Entidades (mapean a documentos MongoDB)
-- Interfaces de repositorios (`IRawMaterialRepository`, etc.)
-- Interfaces de servicios (`IRawMaterialService`, etc.)
-- DTOs de Request y Response
-- Excepciones de negocio (`BusinessException`, `NotFoundException`)
-- Clases de configuración (`MongoDbSettings`)
-- **NO tiene dependencias** a otros proyectos Kelas ni a MongoDB.Driver
+| Artifact | Location |
+|----------|----------|
+| Entity class | `Kelas.Domain/Entities/{Name}.cs` |
+| Request DTO | `Kelas.Domain/Models/Requests/{Name}Request.cs` |
+| Response DTO | `Kelas.Domain/Models/Responses/{Name}Response.cs` |
+| Custom exception | `Kelas.Domain/Exceptions/{Name}Exception.cs` |
+| Repository interface | `Kelas.Domain/Interfaces/Repositories/I{Name}Repository.cs` |
+| Service interface | `Kelas.Domain/Interfaces/Services/I{Name}Service.cs` |
+| Repository impl | `Kelas.Repositories/{Name}Repository.cs` |
+| Service impl | `Kelas.Services/{Name}Service.cs` |
+| Controller | `Kelas.Api/Controllers/{Name}Controller.cs` |
+| DI registration | `Kelas.IoC.Resolver/DependencyResolver.cs` (add to existing) |
 
-### Kelas.Repositories
+## Controller Pattern
 
-- Implementaciones de repositorios
-- Acceso directo a MongoDB (único proyecto que hace queries)
-- NuGet: `MongoDB.Driver`
-
-### Kelas.Services
-
-- Implementaciones de servicios
-- Lógica de negocio, validaciones, orquestación
-- Mapeo entre Entities y DTOs
-- **NO accede a MongoDB directamente** — usa interfaces de repositorios
-
-### Kelas.IoC.Resolver
-
-- `DependencyResolver.cs` con método `AddKelasServices(IServiceCollection, IConfiguration)`
-- Registra MongoDB (IMongoClient Singleton, IMongoDatabase Scoped)
-- Registra repositorios y servicios
-- NuGet: `MongoDB.Driver`, `Microsoft.Extensions.DependencyInjection.Abstractions`, `Microsoft.Extensions.Options.ConfigurationExtensions`, `Microsoft.Extensions.Configuration.Abstractions`
-
-### Kelas.Api
-
-- Controllers (livianos, solo routing)
-- Middleware (error handling)
-- Program.cs (configuración del host)
-- Archivos de configuración y deploy
-- NuGet: `MongoDB.Driver` (para HealthController)
-
-## Patrones Obligatorios
-
-### Repository Pattern
-
-- Los repositorios son los **únicos** que interactúan con MongoDB.
-- Cada colección tiene su propio repositorio.
-- Interfaz en `Kelas.Domain/Interfaces/Repositories/`, implementación en `Kelas.Repositories/`.
+Controllers are thin routing layers. No business logic, no direct data access.
 
 ```csharp
-// Kelas.Domain/Interfaces/Repositories/IRawMaterialRepository.cs
-namespace Kelas.Domain.Interfaces.Repositories;
+using Kelas.Domain.Interfaces.Services;
+using Kelas.Domain.Models.Requests;
+using Kelas.Domain.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-public interface IRawMaterialRepository
-{
-    Task<RawMaterial?> GetByIdAsync(string id);
-    Task<List<RawMaterial>> GetAllAsync(RawMaterialFilter filter);
-    Task<RawMaterial> CreateAsync(RawMaterial entity);
-    Task UpdateAsync(string id, RawMaterial entity);
-}
-
-// Kelas.Repositories/RawMaterialRepository.cs
-namespace Kelas.Repositories;
-
-public class RawMaterialRepository : IRawMaterialRepository
-{
-    private readonly IMongoCollection<RawMaterial> _collection;
-
-    public RawMaterialRepository(IMongoDatabase database)
-    {
-        _collection = database.GetCollection<RawMaterial>("rawMaterials");
-    }
-    // ...
-}
-```
-
-### Service Pattern
-
-- Interfaz en `Kelas.Domain/Interfaces/Services/`, implementación en `Kelas.Services/`.
-- Contienen toda la lógica de negocio.
-- Orquestan llamadas a múltiples repositorios.
-- Validan reglas de negocio.
-- Mapean entre Entities y DTOs.
-
-```csharp
-// Kelas.Domain/Interfaces/Services/IRawMaterialService.cs
-namespace Kelas.Domain.Interfaces.Services;
-
-public interface IRawMaterialService
-{
-    Task<List<RawMaterialResponse>> GetAllAsync(RawMaterialFilter filter);
-    Task<RawMaterialResponse> CreateAsync(CreateRawMaterialRequest request);
-}
-
-// Kelas.Services/RawMaterialService.cs
-namespace Kelas.Services;
-
-public class RawMaterialService : IRawMaterialService
-{
-    private readonly IRawMaterialRepository _rawMaterialRepo;
-    private readonly IStockRepository _stockRepo;
-
-    public async Task<RawMaterialResponse> CreateAsync(CreateRawMaterialRequest request)
-    {
-        var existing = await _rawMaterialRepo.GetByNameAsync(request.Name);
-        if (existing != null)
-            throw new BusinessException("Ya existe una materia prima con ese nombre.");
-
-        var entity = new RawMaterial { Name = request.Name, Unit = request.Unit, MinStock = request.MinStock };
-        var created = await _rawMaterialRepo.CreateAsync(entity);
-
-        await _stockRepo.CreateAsync(new Stock
-        {
-            ItemType = "RawMaterial",
-            ItemId = created.Id,
-            CurrentQuantity = 0
-        });
-
-        return MapToResponse(created);
-    }
-}
-```
-
-### Dependency Injection (IoC.Resolver)
-
-```csharp
-// Kelas.IoC.Resolver/DependencyResolver.cs
-namespace Kelas.IoC.Resolver;
-
-public static class DependencyResolver
-{
-    public static IServiceCollection AddKelasServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
-
-        services.AddSingleton<IMongoClient>(sp =>
-        {
-            var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-            return new MongoClient(settings.ConnectionString);
-        });
-
-        services.AddScoped<IMongoDatabase>(sp =>
-        {
-            var client = sp.GetRequiredService<IMongoClient>();
-            var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-            return client.GetDatabase(settings.DatabaseName);
-        });
-
-        AddRepositories(services);
-        AddServices(services);
-
-        return services;
-    }
-
-    private static void AddRepositories(IServiceCollection services)
-    {
-        services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
-        // ...
-    }
-
-    private static void AddServices(IServiceCollection services)
-    {
-        services.AddScoped<IRawMaterialService, RawMaterialService>();
-        // ...
-    }
-}
-```
-
-### Controllers Livianos
-
-- Sin lógica de negocio.
-- Solo: recibir request → llamar servicio → retornar response.
-- Todos con `[Authorize]` excepto AuthController y HealthController.
-
-```csharp
-// Kelas.Api/Controllers/RawMaterialsController.cs
 namespace Kelas.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class RawMaterialsController : ControllerBase
+public class ExampleController : ControllerBase
 {
-    private readonly IRawMaterialService _service;
+    private readonly IExampleService _service;
 
-    public RawMaterialsController(IRawMaterialService service)
+    public ExampleController(IExampleService service)
     {
         _service = service;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<RawMaterialResponse>>> GetAll([FromQuery] RawMaterialFilter filter)
+    public async Task<ActionResult<List<ExampleResponse>>> GetAll()
     {
-        var result = await _service.GetAllAsync(filter);
+        var result = await _service.GetAllAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ExampleResponse>> GetById(string id)
+    {
+        var result = await _service.GetByIdAsync(id);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<RawMaterialResponse>> Create([FromBody] CreateRawMaterialRequest request)
+    public async Task<ActionResult<ExampleResponse>> Create([FromBody] CreateExampleRequest request)
     {
         var result = await _service.CreateAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
@@ -254,132 +92,265 @@ public class RawMaterialsController : ControllerBase
 }
 ```
 
-## Manejo de Errores
+- Only `AuthController` and `HealthController` omit `[Authorize]`.
+- Return `Ok()`, `CreatedAtAction()`, or let exceptions propagate to middleware.
 
-- Excepciones custom en `Kelas.Domain/Exceptions/`.
-- Middleware global en `Kelas.Api/Middleware/`.
+## Service Pattern
+
+Services own all business logic. They map between entities and DTOs manually.
 
 ```csharp
-// Kelas.Domain/Exceptions/BusinessException.cs
-namespace Kelas.Domain.Exceptions;
+using Kelas.Domain.Exceptions;
+using Kelas.Domain.Interfaces.Repositories;
+using Kelas.Domain.Interfaces.Services;
+using Kelas.Domain.Models.Requests;
+using Kelas.Domain.Models.Responses;
 
-public class BusinessException : Exception
+namespace Kelas.Services;
+
+public class ExampleService : IExampleService
 {
-    public BusinessException(string message) : base(message) { }
-}
+    private readonly IExampleRepository _repository;
 
-// Kelas.Domain/Exceptions/NotFoundException.cs
-namespace Kelas.Domain.Exceptions;
-
-public class NotFoundException : Exception
-{
-    public NotFoundException(string entity, string id)
-        : base($"{entity} con id '{id}' no encontrado.") { }
-}
-
-// Kelas.Api/Middleware/ErrorHandlingMiddleware.cs
-namespace Kelas.Api.Middleware;
-
-public class ErrorHandlingMiddleware
-{
-    public async Task InvokeAsync(HttpContext context)
+    public ExampleService(IExampleRepository repository)
     {
-        try { await _next(context); }
-        catch (BusinessException ex)
-        {
-            context.Response.StatusCode = 400;
-            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-        }
-        catch (NotFoundException ex)
-        {
-            context.Response.StatusCode = 404;
-            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Unhandled exception");
-            context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
-        }
+        _repository = repository;
+    }
+
+    public async Task<ExampleResponse> GetByIdAsync(string id)
+    {
+        var entity = await _repository.GetByIdAsync(id)
+            ?? throw new NotFoundException("Example", id);
+
+        return MapToResponse(entity);
+    }
+
+    public async Task<ExampleResponse> CreateAsync(CreateExampleRequest request)
+    {
+        // Validate
+        if (string.IsNullOrWhiteSpace(request.Name))
+            throw new BusinessException("El nombre es obligatorio.");
+
+        // Map to entity, persist, return response
+        var entity = MapToEntity(request);
+        var created = await _repository.CreateAsync(entity);
+        return MapToResponse(created);
+    }
+
+    private static ExampleResponse MapToResponse(ExampleEntity entity) => new()
+    {
+        Id = entity.Id.ToString(),
+        Name = entity.Name
+    };
+}
+```
+
+- Throw `BusinessException` for validation failures (→ HTTP 400).
+- Throw `NotFoundException` for missing entities (→ HTTP 404).
+- `NotFoundException` constructor: `new NotFoundException("EntityName", id)` produces message `"{EntityName} con id '{id}' no encontrado."`.
+
+## Repository Pattern
+
+Repositories are the only layer that touches MongoDB.
+
+```csharp
+using Kelas.Domain.Entities;
+using Kelas.Domain.Interfaces.Repositories;
+using MongoDB.Bson;
+using MongoDB.Driver;
+
+namespace Kelas.Repositories;
+
+public class ExampleRepository : IExampleRepository
+{
+    private readonly IMongoCollection<ExampleEntity> _collection;
+
+    public ExampleRepository(IMongoDatabase database)
+    {
+        _collection = database.GetCollection<ExampleEntity>("examples");
+    }
+
+    public async Task<ExampleEntity?> GetByIdAsync(string id)
+    {
+        var objectId = ObjectId.Parse(id);
+        return await _collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
+    }
+
+    public async Task<ExampleEntity> CreateAsync(ExampleEntity entity)
+    {
+        entity.CreatedAt = DateTime.UtcNow;
+        await _collection.InsertOneAsync(entity);
+        return entity;
+    }
+
+    public async Task UpdateAsync(string id, ExampleEntity entity)
+    {
+        var objectId = ObjectId.Parse(id);
+        entity.UpdatedAt = DateTime.UtcNow;
+        await _collection.ReplaceOneAsync(x => x.Id == objectId, entity);
     }
 }
 ```
+
+- Collection names: camelCase plural (e.g., `rawMaterials`, `stockMovements`).
+- Use `Builders<T>.Filter` for dynamic filter construction on optional parameters.
+- Immutable collections (`stockMovements`, `cashMovements`): expose only insert methods, never update/delete.
+
+## Entity Pattern
+
+```csharp
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Kelas.Domain.Entities;
+
+public class ExampleEntity
+{
+    [BsonId]
+    public ObjectId Id { get; set; }
+
+    [BsonElement("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [BsonElement("isActive")]
+    public bool IsActive { get; set; } = true;
+
+    [BsonElement("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [BsonElement("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
+}
+```
+
+- `[BsonId]` on `ObjectId Id`.
+- `[BsonElement("camelCaseName")]` on every persisted property.
+- Always include `CreatedAt` and `UpdatedAt`.
+
+## DTO Pattern
+
+```csharp
+namespace Kelas.Domain.Models.Responses;
+
+public class ExampleResponse
+{
+    public string Id { get; set; } = string.Empty;  // ObjectId.ToString()
+    public string Name { get; set; } = string.Empty;
+}
+```
+
+- IDs are `string` in DTOs (converted from `ObjectId` in service layer).
+- No `[BsonElement]` attributes on DTOs.
+
+## DI Registration
+
+All registrations go in `Kelas.IoC.Resolver/DependencyResolver.cs`:
+
+```csharp
+private static void AddRepositories(IServiceCollection services)
+{
+    services.AddScoped<IExampleRepository, ExampleRepository>();
+}
+
+private static void AddServices(IServiceCollection services)
+{
+    services.AddScoped<IExampleService, ExampleService>();
+}
+```
+
+- `IMongoClient`: Singleton.
+- `IMongoDatabase`: Scoped.
+- All repositories and services: Scoped.
+
+## Error Handling Middleware
+
+Already configured in `Program.cs`. Exception mapping:
+
+| Exception | HTTP Status | Response Body |
+|-----------|-------------|---------------|
+| `BusinessException` | 400 | `{ "error": "<message>" }` |
+| `NotFoundException` | 404 | `{ "error": "<message>" }` |
+| Unhandled | 500 | `{ "error": "Error interno del servidor" }` |
+
+Do not add try/catch in controllers — let exceptions propagate to middleware.
+
+## Program.cs Pipeline
+
+The middleware pipeline order in `Program.cs`:
+
+```csharp
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseCors();
+// Authentication/Authorization middleware goes here when added
+app.MapControllers();
+```
+
+CORS allows `http://localhost:3000` in development.
 
 ## Naming Conventions
 
-- **Clases**: PascalCase (`RawMaterialService`, `PurchaseRepository`).
-- **Métodos**: PascalCase + Async suffix (`GetAllAsync`, `CreateAsync`).
-- **Propiedades**: PascalCase (`CurrentQuantity`, `LastPricePerUnit`).
-- **Variables locales y parámetros**: camelCase (`rawMaterial`, `totalCost`).
-- **Interfaces**: Prefijo `I` (`IRawMaterialService`).
-- **Archivos**: Mismo nombre que la clase (`RawMaterialService.cs`).
-- **Namespaces**: Siguen la estructura de proyecto (`Kelas.Domain.Entities`, `Kelas.Services`, `Kelas.Repositories`).
-- **Colecciones MongoDB**: camelCase plural (`rawMaterials`, `cashMovements`).
+| Element | Rule | Example |
+|---------|------|---------|
+| Classes/Methods/Properties | PascalCase | `RawMaterialService`, `GetAllAsync` |
+| Async methods | Always suffix with `Async` | `CreateAsync`, `GetByIdAsync` |
+| Interfaces | Prefix with `I` | `IRawMaterialRepository` |
+| Local variables/parameters | camelCase | `rawMaterial`, `filterBuilder` |
+| Files | Match class name exactly | `RawMaterialService.cs` |
+| Namespaces | Mirror folder path | `Kelas.Domain.Entities` |
+| MongoDB collections | camelCase plural | `rawMaterials`, `cashMovements` |
+| MongoDB fields | camelCase | `lastPricePerUnit`, `currentQuantity` |
 
-## Configuración de MongoDB
+## Configuration
+
+Settings in `appsettings.json`, overridable via environment variables using `Section__Key` format:
+
+| Section | Keys | Env Override |
+|---------|------|--------------|
+| `MongoDb` | `ConnectionString`, `DatabaseName` | `MongoDb__ConnectionString` |
+| `Auth` | `Email`, `Password` | `Auth__Email`, `Auth__Password` |
+| `Jwt` | `Secret`, `ExpirationHours` | `Jwt__Secret`, `Jwt__ExpirationHours` |
+
+## Transactions
+
+Use MongoDB sessions for operations spanning multiple collections:
 
 ```csharp
-// Kelas.Domain/Configuration/MongoDbSettings.cs
-namespace Kelas.Domain.Configuration;
-
-public class MongoDbSettings
+using var session = await _client.StartSessionAsync();
+session.StartTransaction();
+try
 {
-    public string ConnectionString { get; set; } = string.Empty;
-    public string DatabaseName { get; set; } = string.Empty;
+    // multiple collection operations with session parameter
+    await session.CommitTransactionAsync();
+}
+catch
+{
+    await session.AbortTransactionAsync();
+    throw;
 }
 ```
 
-La configuración se lee desde `appsettings.json` y puede sobreescribirse con variables de ambiente (`MongoDb__ConnectionString`, `MongoDb__DatabaseName`).
+Requires replica set (configured in docker-compose for local dev).
 
-## Cómo Agregar una Nueva Feature
+## Prohibited Patterns
 
-1. **Entidad** → `Kelas.Domain/Entities/NuevaEntidad.cs`
-2. **Request/Response DTOs** → `Kelas.Domain/Models/Requests/` y `Kelas.Domain/Models/Responses/`
-3. **Interfaz de repositorio** → `Kelas.Domain/Interfaces/Repositories/INuevaEntidadRepository.cs`
-4. **Interfaz de servicio** → `Kelas.Domain/Interfaces/Services/INuevaEntidadService.cs`
-5. **Implementación de repositorio** → `Kelas.Repositories/NuevaEntidadRepository.cs`
-6. **Implementación de servicio** → `Kelas.Services/NuevaEntidadService.cs`
-7. **Registrar en DI** → `Kelas.IoC.Resolver/DependencyResolver.cs` (AddRepositories + AddServices)
-8. **Controller** → `Kelas.Api/Controllers/NuevaEntidadController.cs`
+- No AutoMapper — map manually in services.
+- No MediatR or CQRS — direct service calls.
+- No FluentValidation — validate in service methods.
+- No repository references from `Kelas.Api`.
+- No `MongoDB.Driver` usage in `Kelas.Domain`.
+- No business logic in controllers or repositories.
+- No update/delete on immutable collections (`stockMovements`, `cashMovements`).
 
-## Tests de Integración
+## New Feature Checklist
 
-- Usar MongoDB real (containerizado con Testcontainers o instancia de test).
-- Cada test class limpia la base antes de ejecutar.
-- Usar `WebApplicationFactory<Program>` para tests de endpoints.
-- No mockear repositorios — el objetivo es probar el flujo completo.
+When implementing a new module, create files in this order:
 
-```csharp
-public class RawMaterialsTests : IClassFixture<TestWebApplicationFactory>
-{
-    private readonly HttpClient _client;
-
-    public RawMaterialsTests(TestWebApplicationFactory factory)
-    {
-        _client = factory.CreateClient();
-        _client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", TestTokenHelper.GenerateToken());
-    }
-
-    [Fact]
-    public async Task Create_ValidRawMaterial_ReturnsCreated()
-    {
-        var request = new { Name = "Cera de Soja", Unit = "gr", MinStock = 500 };
-        var response = await _client.PostAsJsonAsync("/api/raw-materials", request);
-
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var body = await response.Content.ReadFromJsonAsync<RawMaterialResponse>();
-        body!.Name.Should().Be("Cera de Soja");
-    }
-}
-```
-
-## Reglas Generales
-
-- Código simple, sin sobre-ingeniería.
-- No usar AutoMapper — mapeos manuales en los servicios.
-- No usar MediatR ni CQRS — llamadas directas servicio → repositorio.
-- Validaciones simples en el servicio (no FluentValidation a menos que se justifique).
-- Async/await en todo el stack.
-- Usar `ObjectId` de MongoDB como string en los DTOs (serializar/deserializar).
-- Respetar la separación de proyectos: nunca referenciar Repositories desde Api directamente.
+1. Entity → `Kelas.Domain/Entities/`
+2. Request DTO(s) → `Kelas.Domain/Models/Requests/`
+3. Response DTO(s) → `Kelas.Domain/Models/Responses/`
+4. Repository interface → `Kelas.Domain/Interfaces/Repositories/`
+5. Service interface → `Kelas.Domain/Interfaces/Services/`
+6. Repository implementation → `Kelas.Repositories/`
+7. Service implementation → `Kelas.Services/`
+8. Register in DI → `Kelas.IoC.Resolver/DependencyResolver.cs`
+9. Controller → `Kelas.Api/Controllers/`
