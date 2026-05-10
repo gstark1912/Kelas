@@ -1,0 +1,14 @@
+# Environment variables
+.env
+
+# Node.js
+node_modules/
+
+# .NET
+bin/
+obj/
+
+# Frontend build output
+dist/
+
+.kiro/specs

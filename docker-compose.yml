@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./kelas-backend
+      dockerfile: Kelas.Api/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MongoDb__ConnectionString=mongodb://mongo:27017/kelas?replicaSet=rs0
+      - MongoDb__DatabaseName=kelas
+      - Auth__Email=${AUTH_EMAIL:-admin@kelas.com}
+      - Auth__Password=${AUTH_PASSWORD:-admin123}
+      - Jwt__Secret=${JWT_SECRET:-super-secret-key-for-development-only}
+      - Jwt__ExpirationHours=24
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./kelas-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./kelas-backend/scripts/mongo-init.js:/docker-entrypoint-initdb.d/init.js
+    command: ["--replSet", "rs0"]
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }" | mongosh --quiet
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+volumes:
+  mongo-data:
