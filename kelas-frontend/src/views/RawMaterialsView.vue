@@ -46,6 +46,7 @@
       </template>
       <template #actions="{ row }">
         <div class="action-buttons">
+          <button class="btn btn-sm btn-primary" @click="openPurchaseModal(row)">Comprar</button>
           <button class="btn btn-sm" disabled title="Disponible próximamente">Historial</button>
           <button class="btn btn-sm" disabled title="Disponible próximamente">Ajustar</button>
           <button class="btn btn-sm" @click="openEditModal(row)">Editar</button>
@@ -109,6 +110,14 @@
       </template>
     </AppModal>
 
+    <!-- Purchase Modal -->
+    <PurchaseModal
+      :show="showPurchaseModal"
+      :raw-material="selectedRawMaterial"
+      @close="closePurchaseModal"
+      @purchase-created="onPurchaseCreated"
+    />
+
     <!-- Toast -->
     <Transition name="toast">
       <div v-if="notification" class="toast show">
@@ -124,6 +133,7 @@ import DataTable from '@/components/common/DataTable.vue'
 import AppModal from '@/components/common/AppModal.vue'
 import FormField from '@/components/common/FormField.vue'
 import rawMaterialService from '@/services/rawMaterialService'
+import PurchaseModal from '@/components/raw-materials/PurchaseModal.vue'
 
 // Constants
 const validUnits = ['gr', 'kg', 'ml', 'lt', 'unidad', 'cm']
@@ -144,6 +154,10 @@ const loading = ref(false)
 const searchInput = ref('')
 const unitFilter = ref('')
 let searchTimeout = null
+
+// Purchase modal state
+const showPurchaseModal = ref(false)
+const selectedRawMaterial = ref(null)
 
 // Modal state
 const showModal = ref(false)
@@ -281,6 +295,21 @@ async function handleSubmit() {
   } finally {
     submitting.value = false
   }
+}
+
+function openPurchaseModal(row) {
+  selectedRawMaterial.value = { id: row.id, name: row.name }
+  showPurchaseModal.value = true
+}
+
+function closePurchaseModal() {
+  showPurchaseModal.value = false
+  selectedRawMaterial.value = null
+}
+
+async function onPurchaseCreated() {
+  showNotification('✓ Compra registrada exitosamente')
+  await fetchMaterials()
 }
 
 function showNotification(message) {

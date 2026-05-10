@@ -70,6 +70,19 @@ using (var scope = app.Services.CreateScope())
 
     var stockRepo = scope.ServiceProvider.GetRequiredService<IStockRepository>();
     await stockRepo.EnsureIndexesAsync();
+
+    // Inicializar índices de compras y movimientos
+    var purchaseRepo = scope.ServiceProvider.GetRequiredService<IPurchaseRepository>();
+    await purchaseRepo.EnsureIndexesAsync();
+
+    var stockMovementRepo = scope.ServiceProvider.GetRequiredService<IStockMovementRepository>();
+    await stockMovementRepo.EnsureIndexesAsync();
+
+    var cashMovementRepo = scope.ServiceProvider.GetRequiredService<ICashMovementRepository>();
+    await cashMovementRepo.EnsureIndexesAsync();
+
+    var rawMaterialPriceRepo = scope.ServiceProvider.GetRequiredService<IRawMaterialPriceRepository>();
+    await rawMaterialPriceRepo.EnsureIndexesAsync();
 }
 
 app.Run();

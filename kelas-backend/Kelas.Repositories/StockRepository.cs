@@ -43,6 +43,24 @@ public class StockRepository : IStockRepository
         return entity;
     }
 
+    public async Task IncrementQuantityAsync(string itemType, string itemId, decimal quantity, object? session = null)
+    {
+        var objectId = ObjectId.Parse(itemId);
+        var filter = Builders<Stock>.Filter.And(
+            Builders<Stock>.Filter.Eq(x => x.ItemType, itemType),
+            Builders<Stock>.Filter.Eq(x => x.ItemId, objectId));
+        var update = Builders<Stock>.Update.Inc(x => x.CurrentQuantity, quantity);
+
+        if (session is IClientSessionHandle clientSession)
+        {
+            await _collection.UpdateOneAsync(clientSession, filter, update);
+        }
+        else
+        {
+            await _collection.UpdateOneAsync(filter, update);
+        }
+    }
+
     public async Task EnsureIndexesAsync()
     {
         var indexModel = new CreateIndexModel<Stock>(
