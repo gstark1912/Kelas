@@ -1,24 +1,23 @@
 # QA Status
 
 ## Estado actual
-- Ultima tarea revisada: `specs/03-cuentas-de-caja.md`
+- Ultima tarea revisada: `specs/04-gestion-materias-primas.md`
 - Estado: aprobada con observaciones
 - Fecha: 2026-05-10
 
 ## Resumen
-- La API queda saludable y conectada a MongoDB en `GET /api/health`.
-- Al iniciar la app con datos limpios, `GET /api/cash-accounts` retorna las 3 cuentas default: Efectivo, Banco y Mercado Pago.
-- Las 3 cuentas default tienen `currentBalance: 0` e `isActive: true`.
-- `GET /api/cash-accounts/{id}` retorna el detalle correcto de una cuenta.
-- `POST /api/cash-accounts` crea una cuenta nueva con saldo inicial 0.
-- Crear una cuenta duplicada devuelve 400 con mensaje de error, incluyendo duplicado con distinta capitalización.
-- Crear una cuenta con nombre vacío devuelve 400 con mensaje de error.
-- `GET /api/cash-accounts` sin token devuelve 401.
-- Desde el frontend en `localhost:3000`, el login funciona y una llamada autenticada a `/api/cash-accounts` responde 200.
-- `dotnet test --no-restore` no pudo verificarse desde el host porque intenta resolver paquetes NuGet y el sandbox bloquea la red.
+- `POST /api/raw-materials` crea una materia prima con stock inicial 0, precio vigente 0 y estado `Sin stock`.
+- Crear una materia prima duplicada devuelve 400 con mensaje de error visible en API y frontend.
+- `GET /api/raw-materials` lista columnas requeridas: nombre, unidad, stock actual, alerta minima, estado, precio vigente y ultima compra.
+- `GET /api/raw-materials?search=...` y `GET /api/raw-materials?unit=...` filtran correctamente.
+- `PUT /api/raw-materials/{id}` actualiza nombre, unidad y stock minimo.
+- En frontend `localhost:3000/raw-materials`, el alta, edicion, busqueda, filtro por unidad y acciones futuras deshabilitadas funcionan.
+- Se valido estado `Bajo` ajustando un fixture de stock en MongoDB: currentQuantity 3 con minStock 10 retorna `Bajo`.
+- No se encontraron errores de consola funcionales persistentes; hubo un 400 esperado por duplicado y un 502 transitorio no reproducible al repetir el mismo request.
+- No hay tests de integracion de materias primas en `kelas-backend/Kelas.Tests`; solo existen tests para cuentas de caja.
 
 ## Bloqueos
 - Ninguno.
 
 ## Siguiente tarea sugerida
-- `specs/04-gestion-materias-primas.md`
+- `specs/05-compra-materia-prima.md`

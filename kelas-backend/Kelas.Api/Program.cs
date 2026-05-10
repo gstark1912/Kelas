@@ -1,6 +1,7 @@
 using System.Text;
 using Kelas.Api.Middleware;
 using Kelas.Domain.Configuration;
+using Kelas.Domain.Interfaces.Repositories;
 using Kelas.Domain.Interfaces.Services;
 using Kelas.IoC.Resolver;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -57,11 +58,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// 6. Seed de datos iniciales
+// 6. Seed de datos iniciales e inicialización de índices
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<ICashAccountSeeder>();
     await seeder.SeedAsync();
+
+    // Inicializar índices de materias primas y stock
+    var rawMaterialRepo = scope.ServiceProvider.GetRequiredService<IRawMaterialRepository>();
+    await rawMaterialRepo.EnsureIndexesAsync();
+
+    var stockRepo = scope.ServiceProvider.GetRequiredService<IStockRepository>();
+    await stockRepo.EnsureIndexesAsync();
 }
 
 app.Run();

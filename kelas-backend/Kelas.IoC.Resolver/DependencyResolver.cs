@@ -46,6 +46,8 @@ public static class DependencyResolver
     private static void AddRepositories(IServiceCollection services)
     {
         services.AddScoped<ICashAccountRepository, CashAccountRepository>();
+        services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
+        services.AddScoped<IStockRepository, StockRepository>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -53,5 +55,6 @@ public static class DependencyResolver
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICashAccountService, CashAccountService>();
         services.AddScoped<ICashAccountSeeder, CashAccountSeeder>();
+        services.AddScoped<IRawMaterialService, RawMaterialService>();
     }
 }

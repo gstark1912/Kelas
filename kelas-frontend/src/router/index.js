@@ -13,6 +13,12 @@ const routes = [
         name: 'home',
         component: () => import('@/views/HomeView.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/raw-materials',
+        name: 'raw-materials',
+        component: () => import('@/views/RawMaterialsView.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 

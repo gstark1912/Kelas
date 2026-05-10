@@ -270,11 +270,39 @@ export function formatPercent(value) {
 }
 ```
 
-## Navegación
+## Layout y Navegación
 
-Barra lateral con secciones:
-- **PRINCIPAL**: Dashboard
-- **OPERACIONES**: Productos, Materias Primas, Producción, Ventas, Gastos, Caja
+La aplicación usa un layout con sidebar (`AppLayout.vue` + `AppSidebar.vue`) que se muestra automáticamente en todas las rutas con `meta.requiresAuth: true`. Las rutas sin auth (login) se renderizan sin layout.
+
+### Cómo funciona
+
+- `App.vue` evalúa `route.meta.requiresAuth` para decidir si envuelve la vista en `<AppLayout>`.
+- `AppLayout.vue` renderiza el `<AppSidebar>` + un `<main>` con slot para el contenido.
+- `AppSidebar.vue` contiene la navegación con secciones y links.
+
+### Al agregar una nueva pantalla/vista
+
+1. Crear la vista en `src/views/{Nombre}View.vue`
+2. Registrar la ruta en `src/router/index.js` con `meta: { requiresAuth: true }`
+3. Agregar el item de navegación en `AppSidebar.vue` → array `operationItems` (o en la sección correspondiente)
+4. Cambiar `enabled: true` cuando la ruta esté implementada
+
+### Estructura del sidebar
+
+```
+PRINCIPAL
+  └── Dashboard (/)
+
+OPERACIONES
+  ├── Productos (/products) — disabled
+  ├── Materias Primas (/raw-materials) — enabled
+  ├── Producción (/production) — disabled
+  ├── Ventas (/sales) — disabled
+  ├── Gastos (/expenses) — disabled
+  └── Caja (/cash) — disabled
+```
+
+Los items deshabilitados tienen `enabled: false` y se muestran con opacidad reducida sin permitir navegación. Al implementar un módulo nuevo, cambiar a `enabled: true`.
 
 ## Reglas Generales
 
