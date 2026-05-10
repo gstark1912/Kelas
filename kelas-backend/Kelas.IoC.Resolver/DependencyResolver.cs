@@ -1,5 +1,7 @@
 using Kelas.Domain.Configuration;
+using Kelas.Domain.Interfaces.Repositories;
 using Kelas.Domain.Interfaces.Services;
+using Kelas.Repositories;
 using Kelas.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,11 +45,13 @@ public static class DependencyResolver
 
     private static void AddRepositories(IServiceCollection services)
     {
-        // Repositories will be registered here as they are created
+        services.AddScoped<ICashAccountRepository, CashAccountRepository>();
     }
 
     private static void AddServices(IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ICashAccountService, CashAccountService>();
+        services.AddScoped<ICashAccountSeeder, CashAccountSeeder>();
     }
 }

@@ -1,6 +1,7 @@
 using System.Text;
 using Kelas.Api.Middleware;
 using Kelas.Domain.Configuration;
+using Kelas.Domain.Interfaces.Services;
 using Kelas.IoC.Resolver;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -55,5 +56,12 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// 6. Seed de datos iniciales
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<ICashAccountSeeder>();
+    await seeder.SeedAsync();
+}
 
 app.Run();
