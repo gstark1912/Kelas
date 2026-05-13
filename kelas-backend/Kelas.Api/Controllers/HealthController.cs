@@ -16,6 +16,16 @@ public class HealthController : ControllerBase
         _database = database;
     }
 
+    [HttpGet("live")]
+    public IActionResult Live()
+    {
+        return Ok(new
+        {
+            status = "healthy",
+            timestamp = DateTime.UtcNow
+        });
+    }
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {

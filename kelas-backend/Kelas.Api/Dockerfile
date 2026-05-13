@@ -16,5 +16,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 EXPOSE 5000
-ENV ASPNETCORE_URLS=http://+:5000
-ENTRYPOINT ["dotnet", "Kelas.Api.dll"]
+ENTRYPOINT ["sh", "-c", "dotnet Kelas.Api.dll --urls http://0.0.0.0:${PORT:-5000}"]
