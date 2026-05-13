@@ -121,7 +121,9 @@
     <!-- Adjustment Modal -->
     <AdjustmentModal
       :show="showAdjustmentModal"
-      :raw-material="selectedAdjustmentMaterial"
+      :item="selectedAdjustmentMaterial"
+      item-type="RawMaterial"
+      item-label="Materia Prima"
       @close="closeAdjustmentModal"
       @adjustment-created="onAdjustmentCreated"
     />
@@ -129,7 +131,8 @@
     <!-- Stock Movements Modal -->
     <StockMovementsModal
       :show="showMovementsModal"
-      :raw-material="selectedMovementsMaterial"
+      :item="selectedMovementsMaterial"
+      item-type="RawMaterial"
       @close="closeMovementsModal"
     />
 
@@ -395,7 +398,7 @@ onMounted(() => {
   margin: 0;
 }
 
-/* Filters */
+/* Filters bar specific overrides if any */
 .filters-bar {
   display: flex;
   align-items: center;
@@ -404,48 +407,11 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
-.filters-bar input,
-.filters-bar select {
-  padding: 6px 10px;
-  border: 1px solid var(--color-border, #e5e5e7);
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-family: var(--font, inherit);
-  color: var(--color-text, #1a1a1a);
-  background: var(--color-bg, #ffffff);
-}
-
-.filters-bar input:focus,
-.filters-bar select:focus {
-  outline: none;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-/* Action buttons */
+/* Action buttons cell */
 .action-buttons {
   display: flex;
   gap: 6px;
   justify-content: flex-end;
-}
-
-/* Form row */
-.form-row {
-  display: flex;
-  gap: 12px;
-}
-
-.form-row > * {
-  flex: 1;
-}
-
-/* Form error */
-.form-general-error {
-  margin: 0;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: var(--color-negative, #c53030);
-  background: var(--color-negative-bg, #fde8e8);
-  border-radius: var(--radius, 6px);
 }
 
 /* Toast */
@@ -460,7 +426,7 @@ onMounted(() => {
   font-size: 0.85rem;
   font-weight: 500;
   box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
-  z-index: 300;
+  z-index: 1000;
 }
 
 .toast-enter-active,

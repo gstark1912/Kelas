@@ -1,5 +1,5 @@
 <template>
-  <AppModal :show="show" :title="`Historial de Movimientos — ${rawMaterial?.name ?? ''}`" @close="$emit('close')">
+  <AppModal :show="show" :title="`Historial de Movimientos — ${item?.name ?? ''}`" @close="$emit('close')">
     <template #default>
       <!-- Loading state -->
       <div v-if="loading" class="loading-state">
@@ -12,7 +12,7 @@
 
       <!-- Empty state -->
       <p v-else-if="movements.length === 0" class="empty-state">
-        No hay movimientos registrados para esta materia prima.
+        No hay movimientos registrados para {{ itemLabel }}.
       </p>
 
       <!-- Movements table -->
@@ -68,10 +68,14 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  rawMaterial: {
+  item: {
     type: Object,
     default: null
     // Expected shape: { id, name }
+  },
+  itemType: {
+    type: String,
+    default: 'RawMaterial'
   }
 })
 
@@ -88,9 +92,18 @@ const movementTypeLabels = {
   AdjustmentIncrease: 'Ajuste (Ingreso)',
   AdjustmentDecrease: 'Ajuste (Egreso)',
   ProductionConsumption: 'Consumo Producción',
+  ProductionOutput: 'Ingreso Producción',
   SaleDelivery: 'Entrega Venta',
+  SaleOutput: 'Salida Venta',
   InitialStock: 'Stock Inicial'
 }
+
+const itemTypeLabels = {
+  RawMaterial: 'esta materia prima',
+  FinishedProduct: 'este producto'
+}
+
+const itemLabel = itemTypeLabels[props.itemType] ?? 'este ítem'
 
 // Methods
 function formatDate(dateStr) {
@@ -114,6 +127,7 @@ function formatOrigin(movement) {
   if (!movement.referenceType) return '—'
   const labels = {
     Purchase: 'Compra',
+    Production: 'Producción',
     ProductionBatch: 'Producción',
     Sale: 'Venta'
   }
@@ -122,14 +136,14 @@ function formatOrigin(movement) {
 }
 
 async function fetchMovements() {
-  if (!props.rawMaterial?.id) return
+  if (!props.item?.id) return
 
   loading.value = true
   loadError.value = ''
   movements.value = []
 
   try {
-    const response = await stockAdjustmentService.getMovements('RawMaterial', props.rawMaterial.id)
+    const response = await stockAdjustmentService.getMovements(props.itemType, props.item.id)
     movements.value = response.data
   } catch {
     loadError.value = 'No se pudieron cargar los movimientos. Intentá nuevamente.'
@@ -252,25 +266,5 @@ watch(() => props.show, (newVal) => {
 
 .text-muted {
   color: var(--color-text-muted, #9b9ba7);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover {
-  background: var(--color-bg-secondary, #f7f7f8);
 }
 </style>

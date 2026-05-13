@@ -3,8 +3,9 @@ namespace Kelas.Domain.Models.Responses;
 public class StockAdjustmentResponse
 {
     public string Id { get; set; } = string.Empty;
-    public string RawMaterialId { get; set; } = string.Empty;
-    public string RawMaterialName { get; set; } = string.Empty;
+    public string ItemType { get; set; } = string.Empty;
+    public string ItemId { get; set; } = string.Empty;
+    public string ItemName { get; set; } = string.Empty;
     public string MovementType { get; set; } = string.Empty;
     public decimal Quantity { get; set; }
     public string AdjustmentReason { get; set; } = string.Empty;

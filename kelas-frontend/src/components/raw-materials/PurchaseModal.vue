@@ -265,32 +265,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.form-row {
-  display: flex;
-  gap: 12px;
-}
-
-.form-row > * {
-  flex: 1;
-}
-
-.price-per-unit {
-  margin: -8px 0 16px;
-  font-size: 0.82rem;
-  color: var(--color-text-secondary, #6b6b76);
-}
-
 .price-per-unit strong {
   color: var(--color-primary, #5b5bd6);
-}
-
-.form-general-error {
-  margin: 0;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: var(--color-negative, #c53030);
-  background: var(--color-negative-bg, #fde8e8);
-  border-radius: var(--radius, 6px);
 }
 
 .checkbox-field {
@@ -310,41 +286,5 @@ onMounted(async () => {
   width: auto;
   margin: 0;
   cursor: pointer;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--color-bg-secondary, #f7f7f8);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover, #4a4ac4);
-  border-color: var(--color-primary-hover, #4a4ac4);
 }
 </style>

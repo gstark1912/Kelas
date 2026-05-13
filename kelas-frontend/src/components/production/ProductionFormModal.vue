@@ -205,15 +205,6 @@ function formatNumber(value) {
 </script>
 
 <style scoped>
-.form-row {
-  display: flex;
-  gap: 12px;
-}
-
-.form-row > * {
-  flex: 1;
-}
-
 .warning-box {
   border: 1px solid var(--color-warning-bg, #fef3c7);
   background: #fffbeb;
@@ -255,40 +246,5 @@ function formatNumber(value) {
 .warning-head {
   font-weight: 700;
   color: var(--color-text-secondary, #6b6b76);
-}
-
-.form-general-error {
-  margin: 0;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: var(--color-negative, #c53030);
-  background: var(--color-negative-bg, #fde8e8);
-  border-radius: var(--radius, 6px);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  font-family: var(--font, inherit);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
 }
 </style>

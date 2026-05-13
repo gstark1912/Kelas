@@ -266,58 +266,9 @@ onMounted(async () => {
   color: var(--color-text, #1a1a1a);
 }
 
-.filters-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filters-bar input,
-.filters-bar select {
-  padding: 6px 10px;
-  border: 1px solid var(--color-border, #e5e5e7);
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-family: var(--font, inherit);
-  color: var(--color-text, #1a1a1a);
-  background: var(--color-bg, #ffffff);
-}
-
+/* Filters bar specific min-width */
 .filters-bar select {
   min-width: 220px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  font-family: var(--font, inherit);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-.btn-sm {
-  padding: 4px 10px;
-  font-size: 0.8rem;
 }
 
 .action-buttons {
@@ -326,34 +277,7 @@ onMounted(async () => {
   justify-content: flex-end;
 }
 
-.fw-600 {
-  font-weight: 600;
-}
-
-.text-muted {
-  color: var(--color-text-secondary, #6b6b76);
-  font-size: 0.85rem;
-}
-
-.num {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--color-text, #1a1a1a);
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
-  z-index: 300;
-}
-
+/* Toast variants */
 .toast.toast-error {
   background: var(--color-negative, #c53030);
 }

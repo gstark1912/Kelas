@@ -3,10 +3,10 @@
     <template #default>
       <!-- Modal header info -->
       <div class="modal-info">
-        <span class="modal-info-label">Materia Prima</span>
-        <span class="modal-info-value">{{ rawMaterial?.name }}</span>
+        <span class="modal-info-label">{{ itemLabel }}</span>
+        <span class="modal-info-value">{{ selectedItem?.name }}</span>
         <span class="modal-info-label">Stock Actual</span>
-        <span class="modal-info-value">{{ rawMaterial?.currentQuantity ?? 0 }}</span>
+        <span class="modal-info-value">{{ currentStock }}</span>
       </div>
 
       <!-- Confirmation overlay for same stock -->
@@ -26,7 +26,7 @@
             type="number"
             min="0"
             step="any"
-            :placeholder="`Stock actual: ${rawMaterial?.currentQuantity ?? 0}`"
+            :placeholder="`Stock actual: ${currentStock}`"
             :disabled="submitting"
           />
         </FormField>
@@ -95,6 +95,19 @@ const props = defineProps({
     type: Object,
     default: null
     // Expected shape: { id, name, currentQuantity }
+  },
+  item: {
+    type: Object,
+    default: null
+    // Expected shape: { id, name, currentQuantity/currentStock }
+  },
+  itemType: {
+    type: String,
+    default: 'RawMaterial'
+  },
+  itemLabel: {
+    type: String,
+    default: 'Materia Prima'
   }
 })
 
@@ -135,10 +148,16 @@ const isFormValid = computed(() => {
   )
 })
 
+const selectedItem = computed(() => props.item ?? props.rawMaterial)
+
+const currentStock = computed(() => {
+  const item = selectedItem.value
+  return item?.currentQuantity ?? item?.currentStock ?? 0
+})
+
 const delta = computed(() => {
   if (form.value.newStock === null) return null
-  const current = props.rawMaterial?.currentQuantity ?? 0
-  return form.value.newStock - current
+  return form.value.newStock - currentStock.value
 })
 
 // Methods
@@ -184,7 +203,8 @@ async function submitAdjustment() {
   submitting.value = true
 
   const payload = {
-    rawMaterialId: props.rawMaterial?.id,
+    itemType: props.itemType,
+    itemId: selectedItem.value?.id,
     newStock: form.value.newStock,
     reason: form.value.reason,
     date: form.value.date,
@@ -262,15 +282,6 @@ watch(() => props.show, (newVal) => {
   justify-content: center;
 }
 
-.form-general-error {
-  margin: 0;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: var(--color-negative, #c53030);
-  background: var(--color-negative-bg, #fde8e8);
-  border-radius: var(--radius, 6px);
-}
-
 .delta-preview {
   margin: -8px 0 16px;
   font-size: 0.82rem;
@@ -283,42 +294,6 @@ watch(() => props.show, (newVal) => {
 
 .delta-negative {
   color: var(--color-negative, #c53030);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--color-bg-secondary, #f7f7f8);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover, #4a4ac4);
-  border-color: var(--color-primary-hover, #4a4ac4);
 }
 
 .btn-warning {

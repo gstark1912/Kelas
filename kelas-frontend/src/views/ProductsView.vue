@@ -67,6 +67,8 @@
                 <td>
                   <div class="action-buttons">
                     <button class="btn btn-sm" @click="openRecipeModal(product)">Receta</button>
+                    <button class="btn btn-sm" @click="openMovementsModal(product)">Historial</button>
+                    <button class="btn btn-sm btn-primary" @click="openAdjustmentModal(product)">Ajustar</button>
                     <button class="btn btn-sm btn-primary" @click="openEditModal(product)">Editar</button>
                     <button class="btn btn-sm btn-danger" @click="openHideConfirm(product)">Ocultar</button>
                   </div>
@@ -92,6 +94,24 @@
       :product="selectedProductDetail"
       @close="closeRecipeModal"
       @recipe-updated="onRecipeUpdated"
+    />
+
+    <!-- Stock Movements Modal -->
+    <StockMovementsModal
+      :show="showMovementsModal"
+      :item="selectedMovementsProduct"
+      item-type="FinishedProduct"
+      @close="closeMovementsModal"
+    />
+
+    <!-- Adjustment Modal -->
+    <AdjustmentModal
+      :show="showAdjustmentModal"
+      :item="selectedAdjustmentProduct"
+      item-type="FinishedProduct"
+      item-label="Producto"
+      @close="closeAdjustmentModal"
+      @adjustment-created="onAdjustmentCreated"
     />
 
     <!-- Confirm Hide Dialog -->
@@ -120,6 +140,8 @@ import productService from '@/services/productService'
 import ProductFormModal from '@/components/products/ProductFormModal.vue'
 import RecipeModal from '@/components/products/RecipeModal.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import StockMovementsModal from '@/components/raw-materials/StockMovementsModal.vue'
+import AdjustmentModal from '@/components/raw-materials/AdjustmentModal.vue'
 
 // Table columns definition
 const columns = [
@@ -149,6 +171,12 @@ const selectedProduct = ref(null)
 
 const showRecipeModal = ref(false)
 const selectedProductDetail = ref(null)
+
+const showMovementsModal = ref(false)
+const selectedMovementsProduct = ref(null)
+
+const showAdjustmentModal = ref(false)
+const selectedAdjustmentProduct = ref(null)
 
 const showHideConfirm = ref(false)
 
@@ -277,6 +305,37 @@ async function onRecipeUpdated() {
   await fetchProducts()
 }
 
+// Movements modal
+function openMovementsModal(product) {
+  selectedMovementsProduct.value = { id: product.id, name: product.name }
+  showMovementsModal.value = true
+}
+
+function closeMovementsModal() {
+  showMovementsModal.value = false
+  selectedMovementsProduct.value = null
+}
+
+// Adjustment modal
+function openAdjustmentModal(product) {
+  selectedAdjustmentProduct.value = {
+    id: product.id,
+    name: product.name,
+    currentQuantity: product.currentStock
+  }
+  showAdjustmentModal.value = true
+}
+
+function closeAdjustmentModal() {
+  showAdjustmentModal.value = false
+  selectedAdjustmentProduct.value = null
+}
+
+async function onAdjustmentCreated() {
+  showNotification('✓ Ajuste registrado exitosamente', '')
+  await fetchProducts()
+}
+
 // Hide confirm
 function openHideConfirm(product) {
   selectedProduct.value = product
@@ -353,22 +412,7 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
-.filters-bar input {
-  padding: 6px 10px;
-  border: 1px solid var(--color-border, #e5e5e7);
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-family: var(--font, inherit);
-  color: var(--color-text, #1a1a1a);
-  background: var(--color-bg, #ffffff);
-}
-
-.filters-bar input:focus {
-  outline: none;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-/* Table */
+/* Table overrides or specific classes */
 .table-container {
   border: 1px solid var(--color-border, #e5e5e7);
   border-radius: var(--radius-lg, 8px);
@@ -463,95 +507,13 @@ tbody tr:hover {
   font-weight: 600;
 }
 
-/* Utilities */
-.num {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.fw-600 {
-  font-weight: 600;
-}
-
-.text-muted {
-  color: var(--color-text-secondary, #6b6b76);
-  font-size: 0.85rem;
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--color-bg-secondary, #f7f7f8);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover, #4a4ac4);
-  border-color: var(--color-primary-hover, #4a4ac4);
-}
-
-.btn-danger {
-  background: var(--color-negative, #c53030);
-  color: #fff;
-  border-color: var(--color-negative, #c53030);
-}
-
-.btn-danger:hover:not(:disabled) {
-  background: #a82828;
-  border-color: #a82828;
-}
-
-.btn-sm {
-  padding: 4px 10px;
-  font-size: 0.8rem;
-}
-
 .action-buttons {
   display: flex;
   gap: 6px;
   justify-content: flex-end;
 }
 
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--color-text, #1a1a1a);
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
-  z-index: 400;
-}
-
+/* Toast variants */
 .toast.toast-warning {
   background: var(--color-warning, #b45309);
 }

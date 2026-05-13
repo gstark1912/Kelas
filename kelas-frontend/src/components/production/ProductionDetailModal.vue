@@ -158,14 +158,4 @@ h3 {
   text-transform: uppercase;
   font-size: 0.72rem;
 }
-
-.btn {
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-}
 </style>

@@ -32,7 +32,7 @@ public class StockMovementRepository : IStockMovementRepository
         var objectId = MongoDB.Bson.ObjectId.Parse(itemId);
         return await _collection
             .Find(x => x.ItemType == itemType && x.ItemId == objectId)
-            .Sort(Builders<StockMovement>.Sort.Descending(x => x.Date))
+            .Sort(Builders<StockMovement>.Sort.Descending(x => x.CreatedAt))
             .ToListAsync();
     }
 

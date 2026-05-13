@@ -332,15 +332,6 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
-.filters-bar select,
-.filters-bar input {
-  padding: 6px 10px;
-  border: 1px solid var(--color-border, #e5e5e7);
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  background: var(--color-bg, #ffffff);
-}
-
 /* KPI Grid */
 .kpi-grid {
   display: grid;

@@ -21,21 +21,21 @@ public class StockAdjustmentService : IStockAdjustmentService
     };
 
     private readonly IMongoClient _client;
-    private readonly IMongoDatabase _database;
     private readonly IRawMaterialRepository _rawMaterialRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IStockMovementRepository _stockMovementRepository;
     private readonly IStockRepository _stockRepository;
 
     public StockAdjustmentService(
         IMongoClient client,
-        IMongoDatabase database,
         IRawMaterialRepository rawMaterialRepository,
+        IProductRepository productRepository,
         IStockMovementRepository stockMovementRepository,
         IStockRepository stockRepository)
     {
         _client = client;
-        _database = database;
         _rawMaterialRepository = rawMaterialRepository;
+        _productRepository = productRepository;
         _stockMovementRepository = stockMovementRepository;
         _stockRepository = stockRepository;
     }
@@ -50,17 +50,17 @@ public class StockAdjustmentService : IStockAdjustmentService
         if (!request.Date.HasValue || request.Date.Value == default)
             throw new BusinessException("La fecha es obligatoria.");
 
+        ValidateItemType(request.ItemType);
+        ValidateItemId(request.ItemId);
+
         // Validate newStock is not negative
         if (request.NewStock < 0)
             throw new BusinessException("El nuevo stock no puede ser negativo.");
 
-        // Look up raw material
-        var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.RawMaterialId);
-        if (rawMaterial is null || !rawMaterial.IsActive)
-            throw new NotFoundException("RawMaterial", request.RawMaterialId);
+        var item = await GetAdjustableItemAsync(request.ItemType, request.ItemId);
 
         // Read current stock and calculate delta
-        var currentStock = await _stockRepository.GetByItemAsync("RawMaterial", rawMaterial.Id.ToString());
+        var currentStock = await _stockRepository.GetByItemAsync(request.ItemType, item.Id.ToString());
         var currentQuantity = currentStock?.CurrentQuantity ?? 0m;
         var delta = request.NewStock - currentQuantity;
 
@@ -77,8 +77,8 @@ public class StockAdjustmentService : IStockAdjustmentService
         try
         {
             var createdMovement = await RegisterMovementAsync(
-                "RawMaterial",
-                rawMaterial.Id,
+                request.ItemType,
+                item.Id,
                 movementType,
                 delta,
                 request.Date.Value,
@@ -95,8 +95,9 @@ public class StockAdjustmentService : IStockAdjustmentService
             return new StockAdjustmentResponse
             {
                 Id = createdMovement.Id.ToString(),
-                RawMaterialId = rawMaterial.Id.ToString(),
-                RawMaterialName = rawMaterial.Name,
+                ItemType = request.ItemType,
+                ItemId = item.Id.ToString(),
+                ItemName = item.Name,
                 MovementType = movementType,
                 Quantity = delta,
                 AdjustmentReason = request.Reason,
@@ -197,11 +198,37 @@ public class StockAdjustmentService : IStockAdjustmentService
     {
         if (string.IsNullOrWhiteSpace(itemType))
             throw new BusinessException("El tipo de ítem es obligatorio.");
+
+        if (itemType is not "RawMaterial" and not "FinishedProduct")
+            throw new BusinessException("El tipo de ítem debe ser RawMaterial o FinishedProduct.");
     }
 
     private static void ValidateItemId(string itemId)
     {
         if (string.IsNullOrWhiteSpace(itemId))
-            throw new BusinessException("El filtro por materia prima es obligatorio.");
+            throw new BusinessException("El identificador de ítem es obligatorio.");
+
+        if (!ObjectId.TryParse(itemId, out _))
+            throw new BusinessException("El identificador de ítem no es válido.");
     }
+
+    private async Task<AdjustableItem> GetAdjustableItemAsync(string itemType, string itemId)
+    {
+        if (itemType == "RawMaterial")
+        {
+            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(itemId);
+            if (rawMaterial is null || !rawMaterial.IsActive)
+                throw new NotFoundException("RawMaterial", itemId);
+
+            return new AdjustableItem(rawMaterial.Id, rawMaterial.Name);
+        }
+
+        var product = await _productRepository.GetByIdAsync(itemId);
+        if (product is null || !product.IsVisible)
+            throw new NotFoundException("Product", itemId);
+
+        return new AdjustableItem(product.Id, product.Name);
+    }
+
+    private sealed record AdjustableItem(ObjectId Id, string Name);
 }

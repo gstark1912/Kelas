@@ -124,25 +124,6 @@ const confirmBtnClass = computed(() => {
   gap: 8px;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover {
-  background: var(--color-bg-secondary, #f7f7f8);
-}
-
 .btn-danger {
   background: var(--color-negative, #c53030);
   color: #fff;
