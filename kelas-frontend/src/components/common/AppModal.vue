@@ -1,7 +1,7 @@
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-overlay" @click.self="$emit('close')">
-      <div class="modal">
+      <div class="modal" :style="{ width: width }">
         <div class="modal-header">
           <h2>{{ title }}</h2>
           <button class="modal-close" @click="$emit('close')" aria-label="Cerrar">✕</button>
@@ -26,6 +26,10 @@ defineProps({
   show: {
     type: Boolean,
     default: false
+  },
+  width: {
+    type: String,
+    default: '520px'
   }
 })
 
@@ -36,45 +40,52 @@ defineEmits(['close'])
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 200;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 80px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .modal {
   background: var(--color-bg, #ffffff);
   border-radius: var(--radius-lg, 8px);
-  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
-  width: 520px;
-  max-height: 80vh;
-  overflow-y: auto;
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.15));
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--color-border, #e5e5e7);
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   margin: 0;
 }
 
 .modal-close {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: var(--color-text-muted, #9b9ba7);
   cursor: pointer;
   padding: 4px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.1s;
 }
 
 .modal-close:hover {
@@ -82,21 +93,24 @@ defineEmits(['close'])
 }
 
 .modal-body {
-  padding: 20px 24px;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .modal-footer {
-  padding: 14px 24px;
+  padding: 14px 20px;
   border-top: 1px solid var(--color-border, #e5e5e7);
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 /* Transition */
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease;
 }
 
 .modal-enter-from,

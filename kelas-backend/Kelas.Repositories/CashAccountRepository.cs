@@ -56,6 +56,22 @@ public class CashAccountRepository : ICashAccountRepository
         }
     }
 
+    public async Task IncrementBalanceAsync(string id, decimal amount, object? session = null)
+    {
+        var objectId = ObjectId.Parse(id);
+        var filter = Builders<CashAccount>.Filter.Eq(x => x.Id, objectId);
+        var update = Builders<CashAccount>.Update.Inc(x => x.CurrentBalance, amount);
+
+        if (session is IClientSessionHandle clientSession)
+        {
+            await _collection.UpdateOneAsync(clientSession, filter, update);
+        }
+        else
+        {
+            await _collection.UpdateOneAsync(filter, update);
+        }
+    }
+
     public async Task EnsureIndexesAsync()
     {
         var indexModels = new List<CreateIndexModel<CashAccount>>

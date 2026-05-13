@@ -421,93 +421,11 @@ onMounted(() => {
   border-color: var(--color-primary, #5b5bd6);
 }
 
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius, 6px);
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--color-border, #e5e5e7);
-  background: var(--color-bg, #ffffff);
-  color: var(--color-text, #1a1a1a);
-  cursor: pointer;
-  transition: all 0.1s;
-  font-family: var(--font, inherit);
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--color-bg-secondary, #f7f7f8);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: var(--color-primary, #5b5bd6);
-  color: #fff;
-  border-color: var(--color-primary, #5b5bd6);
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover, #4a4ac4);
-  border-color: var(--color-primary-hover, #4a4ac4);
-}
-
-.btn-sm {
-  padding: 4px 10px;
-  font-size: 0.8rem;
-}
-
 /* Action buttons */
 .action-buttons {
   display: flex;
   gap: 6px;
   justify-content: flex-end;
-}
-
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.badge-positive {
-  background: var(--color-positive-bg, #e8f5ea);
-  color: var(--color-positive, #2d7a3a);
-}
-
-.badge-negative {
-  background: var(--color-negative-bg, #fde8e8);
-  color: var(--color-negative, #c53030);
-}
-
-.badge-warning {
-  background: var(--color-warning-bg, #fef3c7);
-  color: var(--color-warning, #b45309);
-}
-
-.badge-neutral {
-  background: var(--color-bg-secondary, #f7f7f8);
-  color: var(--color-text-secondary, #6b6b76);
-}
-
-/* Utilities */
-.fw-600 {
-  font-weight: 600;
-}
-
-.num {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
 /* Form row */

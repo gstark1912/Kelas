@@ -24,6 +24,16 @@ public class ErrorHandlingMiddleware
             context.Response.StatusCode = 401;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
+        catch (InsufficientStockException ex)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = ex.Message,
+                code = "INSUFFICIENT_STOCK",
+                items = ex.Items
+            });
+        }
         catch (BusinessException ex)
         {
             context.Response.StatusCode = 400;

@@ -53,6 +53,8 @@ public static class DependencyResolver
         services.AddScoped<ICashMovementRepository, CashMovementRepository>();
         services.AddScoped<IRawMaterialPriceRepository, RawMaterialPriceRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+        services.AddScoped<ISaleRepository, SaleRepository>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -64,5 +66,7 @@ public static class DependencyResolver
         services.AddScoped<IPurchaseService, PurchaseService>();
         services.AddScoped<IStockAdjustmentService, StockAdjustmentService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IProductionService, ProductionService>();
+        services.AddScoped<ISaleService, SaleService>();
     }
 }

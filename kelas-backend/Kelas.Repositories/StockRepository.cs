@@ -23,6 +23,18 @@ public class StockRepository : IStockRepository
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
+    public async Task<List<Stock>> GetByItemsAsync(string itemType, IEnumerable<ObjectId> itemIds)
+    {
+        var ids = itemIds.Distinct().ToList();
+        if (ids.Count == 0)
+            return new List<Stock>();
+
+        var filter = Builders<Stock>.Filter.And(
+            Builders<Stock>.Filter.Eq(x => x.ItemType, itemType),
+            Builders<Stock>.Filter.In(x => x.ItemId, ids));
+        return await _collection.Find(filter).ToListAsync();
+    }
+
     public async Task<List<Stock>> GetByItemTypeAsync(string itemType)
     {
         var filter = Builders<Stock>.Filter.Eq(x => x.ItemType, itemType);
@@ -49,7 +61,9 @@ public class StockRepository : IStockRepository
         var filter = Builders<Stock>.Filter.And(
             Builders<Stock>.Filter.Eq(x => x.ItemType, itemType),
             Builders<Stock>.Filter.Eq(x => x.ItemId, objectId));
-        var update = Builders<Stock>.Update.Inc(x => x.CurrentQuantity, quantity);
+        var update = Builders<Stock>.Update
+            .Inc(x => x.CurrentQuantity, quantity)
+            .Set(x => x.LastUpdated, DateTime.UtcNow);
 
         if (session is IClientSessionHandle clientSession)
         {
@@ -58,6 +72,28 @@ public class StockRepository : IStockRepository
         else
         {
             await _collection.UpdateOneAsync(filter, update);
+        }
+    }
+
+    public async Task UpsertIncrementQuantityAsync(string itemType, ObjectId itemId, decimal quantity, object? session = null)
+    {
+        var filter = Builders<Stock>.Filter.And(
+            Builders<Stock>.Filter.Eq(x => x.ItemType, itemType),
+            Builders<Stock>.Filter.Eq(x => x.ItemId, itemId));
+        var update = Builders<Stock>.Update
+            .SetOnInsert(x => x.ItemType, itemType)
+            .SetOnInsert(x => x.ItemId, itemId)
+            .Inc(x => x.CurrentQuantity, quantity)
+            .Set(x => x.LastUpdated, DateTime.UtcNow);
+        var options = new UpdateOptions { IsUpsert = true };
+
+        if (session is IClientSessionHandle clientSession)
+        {
+            await _collection.UpdateOneAsync(clientSession, filter, update, options);
+        }
+        else
+        {
+            await _collection.UpdateOneAsync(filter, update, options);
         }
     }
 

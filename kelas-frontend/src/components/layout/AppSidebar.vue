@@ -42,8 +42,8 @@ const auth = useAuthStore()
 const operationItems = [
   { path: '/products', label: 'Productos', icon: '🏷️', enabled: true },
   { path: '/raw-materials', label: 'Materias Primas', icon: '🧱', enabled: true },
-  { path: '/production', label: 'Producción', icon: '⚙️', enabled: false },
-  { path: '/sales', label: 'Ventas', icon: '💰', enabled: false },
+  { path: '/production', label: 'Producción', icon: '⚙️', enabled: true },
+  { path: '/sales', label: 'Ventas', icon: '💰', enabled: true },
   { path: '/expenses', label: 'Gastos', icon: '📋', enabled: false },
   { path: '/cash', label: 'Caja', icon: '🏦', enabled: false }
 ]

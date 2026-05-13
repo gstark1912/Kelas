@@ -9,5 +9,6 @@ public interface ICashAccountRepository
     Task<CashAccount?> GetByNameAsync(string name);
     Task<CashAccount> CreateAsync(CashAccount entity);
     Task DecrementBalanceAsync(string id, decimal amount, object? session = null);
+    Task IncrementBalanceAsync(string id, decimal amount, object? session = null);
     Task EnsureIndexesAsync();
 }

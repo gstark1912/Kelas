@@ -4,6 +4,7 @@ using Kelas.Domain.Interfaces.Repositories;
 using Kelas.Domain.Interfaces.Services;
 using Kelas.Domain.Models.Requests;
 using Kelas.Domain.Models.Responses;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Kelas.Services;
@@ -75,24 +76,15 @@ public class StockAdjustmentService : IStockAdjustmentService
         session.StartTransaction();
         try
         {
-            // Create StockMovement with the delta as quantity
-            var stockMovement = new StockMovement
-            {
-                ItemType = "RawMaterial",
-                ItemId = rawMaterial.Id,
-                MovementType = movementType,
-                Quantity = delta,
-                Date = request.Date.Value,
-                ReferenceType = null,
-                ReferenceId = null,
-                AdjustmentReason = request.Reason,
-                Notes = request.Notes,
-                CreatedAt = DateTime.UtcNow
-            };
-            var createdMovement = await _stockMovementRepository.CreateAsync(stockMovement, session);
-
-            // Apply delta to stock
-            await _stockRepository.IncrementQuantityAsync("RawMaterial", rawMaterial.Id.ToString(), delta, session);
+            var createdMovement = await RegisterMovementAsync(
+                "RawMaterial",
+                rawMaterial.Id,
+                movementType,
+                delta,
+                request.Date.Value,
+                adjustmentReason: request.Reason,
+                notes: request.Notes,
+                session: session);
 
             // Commit transaction
             await session.CommitTransactionAsync();
@@ -122,15 +114,68 @@ public class StockAdjustmentService : IStockAdjustmentService
         }
     }
 
+    public Task<Stock?> GetStockByItemAsync(string itemType, string itemId)
+    {
+        ValidateItemType(itemType);
+        ValidateItemId(itemId);
+
+        return _stockRepository.GetByItemAsync(itemType, itemId);
+    }
+
+    public Task<List<Stock>> GetStockByItemsAsync(string itemType, IEnumerable<ObjectId> itemIds)
+    {
+        ValidateItemType(itemType);
+
+        return _stockRepository.GetByItemsAsync(itemType, itemIds);
+    }
+
+    public async Task<StockMovement> RegisterMovementAsync(
+        string itemType,
+        ObjectId itemId,
+        string movementType,
+        decimal quantity,
+        DateTime date,
+        string? referenceType = null,
+        ObjectId? referenceId = null,
+        string? adjustmentReason = null,
+        string? notes = null,
+        object? session = null)
+    {
+        ValidateItemType(itemType);
+
+        if (string.IsNullOrWhiteSpace(movementType))
+            throw new BusinessException("El tipo de movimiento es obligatorio.");
+
+        if (quantity == 0)
+            throw new BusinessException("La cantidad del movimiento no puede ser cero.");
+
+        if (date == default)
+            throw new BusinessException("La fecha es obligatoria.");
+
+        var stockMovement = new StockMovement
+        {
+            ItemType = itemType,
+            ItemId = itemId,
+            MovementType = movementType,
+            Quantity = quantity,
+            Date = date,
+            ReferenceType = referenceType,
+            ReferenceId = referenceId,
+            AdjustmentReason = adjustmentReason,
+            Notes = notes,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var createdMovement = await _stockMovementRepository.CreateAsync(stockMovement, session);
+        await _stockRepository.UpsertIncrementQuantityAsync(itemType, itemId, quantity, session);
+
+        return createdMovement;
+    }
+
     public async Task<List<StockMovementResponse>> GetMovementsByItemAsync(string itemType, string itemId)
     {
-        // Validate itemType
-        if (string.IsNullOrWhiteSpace(itemType))
-            throw new BusinessException("El tipo de ítem es obligatorio.");
-
-        // Validate itemId
-        if (string.IsNullOrWhiteSpace(itemId))
-            throw new BusinessException("El filtro por materia prima es obligatorio.");
+        ValidateItemType(itemType);
+        ValidateItemId(itemId);
 
         var movements = await _stockMovementRepository.GetByItemAsync(itemType, itemId);
 
@@ -146,5 +191,17 @@ public class StockAdjustmentService : IStockAdjustmentService
             Notes = m.Notes,
             CreatedAt = m.CreatedAt
         }).ToList();
+    }
+
+    private static void ValidateItemType(string itemType)
+    {
+        if (string.IsNullOrWhiteSpace(itemType))
+            throw new BusinessException("El tipo de ítem es obligatorio.");
+    }
+
+    private static void ValidateItemId(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId))
+            throw new BusinessException("El filtro por materia prima es obligatorio.");
     }
 }

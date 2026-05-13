@@ -32,6 +32,16 @@ public class ProductRepository : IProductRepository
         return await _collection.Find(combinedFilter).ToListAsync();
     }
 
+    public async Task<List<Product>> GetByIdsAsync(IEnumerable<ObjectId> ids)
+    {
+        var objectIds = ids.Distinct().ToList();
+        if (objectIds.Count == 0)
+            return new List<Product>();
+
+        var filter = Builders<Product>.Filter.In(x => x.Id, objectIds);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
     public async Task<Product?> GetByIdAsync(string id)
     {
         var objectId = ObjectId.Parse(id);

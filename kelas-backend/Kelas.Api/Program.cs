@@ -86,6 +86,9 @@ using (var scope = app.Services.CreateScope())
 
     var productRepo = scope.ServiceProvider.GetRequiredService<IProductRepository>();
     await productRepo.EnsureIndexesAsync();
+
+    var productionBatchRepo = scope.ServiceProvider.GetRequiredService<IProductionBatchRepository>();
+    await productionBatchRepo.EnsureIndexesAsync();
 }
 
 app.Run();
