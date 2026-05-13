@@ -1,0 +1,7 @@
+[build]
+dockerfilePath = "Kelas.Api/Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
