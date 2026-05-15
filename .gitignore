@@ -12,3 +12,4 @@ obj/
 dist/
 
 .kiro/specs
+.codex/specs

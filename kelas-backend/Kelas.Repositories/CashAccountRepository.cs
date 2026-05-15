@@ -19,6 +19,16 @@ public class CashAccountRepository : ICashAccountRepository
         return await _collection.Find(x => x.IsActive).ToListAsync();
     }
 
+    public async Task<List<CashAccount>> GetByIdsAsync(IEnumerable<ObjectId> ids)
+    {
+        var idList = ids.Distinct().ToList();
+        if (idList.Count == 0)
+            return new List<CashAccount>();
+
+        var filter = Builders<CashAccount>.Filter.In(x => x.Id, idList);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
     public async Task<CashAccount?> GetByIdAsync(string id)
     {
         var objectId = ObjectId.Parse(id);

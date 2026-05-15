@@ -4,6 +4,9 @@ export default {
     getAll() {
         return api.get('/cash-accounts')
     },
+    getSummary() {
+        return api.get('/cash-accounts/summary')
+    },
     getById(id) {
         return api.get(`/cash-accounts/${id}`)
     },

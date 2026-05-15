@@ -1,5 +1,7 @@
 using Kelas.Domain.Entities;
 using Kelas.Domain.Interfaces.Repositories;
+using Kelas.Domain.Models.Requests;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Kelas.Repositories;
@@ -25,6 +27,40 @@ public class CashMovementRepository : ICashMovementRepository
         }
 
         return entity;
+    }
+
+    public async Task<List<CashMovement>> GetByFiltersAsync(CashMovementFilterRequest filter)
+    {
+        var builder = Builders<CashMovement>.Filter;
+        var filters = new List<FilterDefinition<CashMovement>>();
+
+        if (filter.DateFrom.HasValue)
+            filters.Add(builder.Gte(x => x.Date, filter.DateFrom.Value));
+
+        if (filter.DateTo.HasValue)
+            filters.Add(builder.Lte(x => x.Date, filter.DateTo.Value));
+
+        if (!string.IsNullOrWhiteSpace(filter.Type))
+        {
+            var type = filter.Type.Trim();
+            var storedTypes = type.Equals("Ingreso", StringComparison.OrdinalIgnoreCase)
+                ? new[] { "Ingreso", "income" }
+                : new[] { "Egreso", "expense" };
+            filters.Add(builder.In(x => x.Type, storedTypes));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Concept))
+            filters.Add(builder.Eq(x => x.Concept, filter.Concept.Trim()));
+
+        if (!string.IsNullOrWhiteSpace(filter.CashAccountId))
+            filters.Add(builder.Eq(x => x.CashAccountId, ObjectId.Parse(filter.CashAccountId)));
+
+        var combinedFilter = filters.Count > 0 ? builder.And(filters) : builder.Empty;
+
+        return await _collection
+            .Find(combinedFilter)
+            .Sort(Builders<CashMovement>.Sort.Descending(x => x.Date).Descending(x => x.Id))
+            .ToListAsync();
     }
 
     public async Task EnsureIndexesAsync()

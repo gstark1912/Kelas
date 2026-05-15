@@ -25,6 +25,13 @@ public class CashAccountsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("summary")]
+    public async Task<ActionResult<CashAccountSummaryResponse>> GetSummary()
+    {
+        var result = await _service.GetSummaryAsync();
+        return Ok(result);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<CashAccountResponse>> GetById(string id)
     {

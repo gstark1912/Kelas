@@ -45,7 +45,7 @@ const operationItems = [
   { path: '/production', label: 'Producción', icon: '⚙️', enabled: true },
   { path: '/sales', label: 'Ventas', icon: '💰', enabled: true },
   { path: '/expenses', label: 'Gastos', icon: '📋', enabled: true },
-  { path: '/cash', label: 'Caja', icon: '🏦', enabled: false }
+  { path: '/cash', label: 'Caja', icon: '🏦', enabled: true }
 ]
 
 function handleLogout() {

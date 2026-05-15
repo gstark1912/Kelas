@@ -25,6 +25,22 @@ public class CashAccountService : ICashAccountService
         return entities.Select(MapToResponse).ToList();
     }
 
+    public async Task<Dictionary<string, CashAccountResponse>> GetByIdsAsync(IEnumerable<ObjectId> ids)
+    {
+        var entities = await _repository.GetByIdsAsync(ids);
+        return entities.ToDictionary(x => x.Id.ToString(), MapToResponse);
+    }
+
+    public async Task<CashAccountSummaryResponse> GetSummaryAsync()
+    {
+        var accounts = await GetAllAsync();
+        return new CashAccountSummaryResponse
+        {
+            Accounts = accounts,
+            TotalBalance = accounts.Sum(x => x.CurrentBalance)
+        };
+    }
+
     public async Task<CashAccountResponse> GetByIdAsync(string id)
     {
         var entity = await _repository.GetByIdAsync(id)
@@ -53,6 +69,22 @@ public class CashAccountService : ICashAccountService
 
         var created = await _repository.CreateAsync(entity);
         return MapToResponse(created);
+    }
+
+    public async Task IncrementBalanceAsync(string accountId, decimal amount, object? session = null)
+    {
+        var account = await _repository.GetByIdAsync(accountId)
+            ?? throw new NotFoundException("CashAccount", accountId);
+
+        await _repository.IncrementBalanceAsync(account.Id.ToString(), amount, session);
+    }
+
+    public async Task DecrementBalanceAsync(string accountId, decimal amount, object? session = null)
+    {
+        var account = await _repository.GetByIdAsync(accountId)
+            ?? throw new NotFoundException("CashAccount", accountId);
+
+        await _repository.DecrementBalanceAsync(account.Id.ToString(), amount, session);
     }
 
     public async Task RegisterPaymentAsync(string accountId, decimal amount, string concept, string description, string referenceType, string referenceId, DateTime date, object? session = null)

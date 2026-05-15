@@ -62,6 +62,7 @@ public static class DependencyResolver
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICashAccountService, CashAccountService>();
+        services.AddScoped<ICashMovementService, CashMovementService>();
         services.AddScoped<ICashAccountSeeder, CashAccountSeeder>();
         services.AddScoped<IRawMaterialService, RawMaterialService>();
         services.AddScoped<IPurchaseService, PurchaseService>();
