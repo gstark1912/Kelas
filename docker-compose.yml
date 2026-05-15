@@ -23,6 +23,8 @@ services:
     build:
       context: ./kelas-frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5000/api
     ports:
       - "3000:80"
     depends_on:
