@@ -86,7 +86,8 @@ function formatDate(value) {
   return new Date(value).toLocaleDateString('es-AR', {
     day: '2-digit',
     month: '2-digit',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'UTC'
   })
 }
 </script>

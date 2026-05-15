@@ -86,6 +86,7 @@ import ProductionFormModal from '@/components/production/ProductionFormModal.vue
 import ProductionDetailModal from '@/components/production/ProductionDetailModal.vue'
 import productionService from '@/services/productionService'
 import productService from '@/services/productService'
+import { toUtcDateEnd, toUtcDateStart } from '@/utils/format'
 
 const columns = [
   { key: 'date', label: 'Fecha', class: 'num' },
@@ -127,8 +128,8 @@ async function fetchBatches() {
   try {
     const params = {}
     if (filters.value.productId) params.productId = filters.value.productId
-    if (filters.value.dateFrom) params.dateFrom = filters.value.dateFrom
-    if (filters.value.dateTo) params.dateTo = filters.value.dateTo
+    if (filters.value.dateFrom) params.dateFrom = toUtcDateStart(filters.value.dateFrom)
+    if (filters.value.dateTo) params.dateTo = toUtcDateEnd(filters.value.dateTo)
 
     const response = await productionService.getAll(params)
     batches.value = response.data.items || []
@@ -208,7 +209,8 @@ function formatDate(value) {
   return new Date(value).toLocaleDateString('es-AR', {
     day: '2-digit',
     month: '2-digit',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'UTC'
   })
 }
 

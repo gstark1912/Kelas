@@ -163,6 +163,7 @@ import DataTable from '@/components/common/DataTable.vue'
 import AppModal from '@/components/common/AppModal.vue'
 import NewSaleModal from '@/components/sales/NewSaleModal.vue'
 import saleService from '@/services/saleService'
+import { toDateInputValue, toUtcDateEnd, toUtcDateStart } from '@/utils/format'
 
 // Constants
 const channels = ['Feria', 'Instagram', 'Tienda', 'Otro']
@@ -226,7 +227,8 @@ function formatDate(dateStr) {
   return date.toLocaleDateString('es-AR', {
     day: '2-digit',
     month: '2-digit',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'UTC'
   })
 }
 
@@ -236,7 +238,8 @@ function formatDateShort(dateStr) {
   if (isNaN(date.getTime())) return '—'
   return date.toLocaleDateString('es-AR', {
     day: '2-digit',
-    month: '2-digit'
+    month: '2-digit',
+    timeZone: 'UTC'
   })
 }
 
@@ -251,8 +254,8 @@ async function fetchSales() {
     const filters = {}
     if (channelFilter.value) filters.channel = channelFilter.value
     if (paymentMethodFilter.value) filters.paymentMethod = paymentMethodFilter.value
-    if (dateFromFilter.value) filters.dateFrom = dateFromFilter.value
-    if (dateToFilter.value) filters.dateTo = dateToFilter.value
+    if (dateFromFilter.value) filters.dateFrom = toUtcDateStart(dateFromFilter.value)
+    if (dateToFilter.value) filters.dateTo = toUtcDateEnd(dateToFilter.value)
     
     const response = await saleService.getAll(filters)
     sales.value = response.data || []
@@ -298,8 +301,8 @@ function showNotification(message) {
 onMounted(() => {
   const now = new Date()
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
-  dateFromFilter.value = firstDay.toISOString().split('T')[0]
-  dateToFilter.value = now.toISOString().split('T')[0]
+  dateFromFilter.value = toDateInputValue(firstDay)
+  dateToFilter.value = toDateInputValue(now)
   
   fetchSales()
 })

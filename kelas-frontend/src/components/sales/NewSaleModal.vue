@@ -157,6 +157,7 @@ import FormField from '@/components/common/FormField.vue'
 import productService from '@/services/productService'
 import cashAccountService from '@/services/cashAccountService'
 import saleService from '@/services/saleService'
+import { toDateInputValue, toUtcDateStart } from '@/utils/format'
 
 const props = defineProps({
   show: Boolean
@@ -175,7 +176,7 @@ const submitting = ref(false)
 const errorMessage = ref('')
 
 const initialForm = {
-  date: new Date().toISOString().split('T')[0],
+  date: toDateInputValue(),
   channel: '',
   paymentMethod: '',
   items: [
@@ -304,7 +305,7 @@ async function handleSubmit() {
   }
 
   const payload = {
-    date: form.value.date,
+    date: toUtcDateStart(form.value.date),
     channel: form.value.channel,
     paymentMethod: form.value.paymentMethod,
     cashAccountId: cashAccountId,
@@ -339,7 +340,7 @@ onMounted(() => {
 watch(() => props.show, (newVal) => {
   if (newVal) {
     form.value = {
-      date: new Date().toISOString().split('T')[0],
+      date: toDateInputValue(),
       channel: '',
       paymentMethod: '',
       items: [{ productId: '', quantity: 1, unitPrice: 0, currentStock: 0, unitCost: 0 }],

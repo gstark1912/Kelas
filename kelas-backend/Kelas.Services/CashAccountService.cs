@@ -4,16 +4,19 @@ using Kelas.Domain.Interfaces.Repositories;
 using Kelas.Domain.Interfaces.Services;
 using Kelas.Domain.Models.Requests;
 using Kelas.Domain.Models.Responses;
+using MongoDB.Bson;
 
 namespace Kelas.Services;
 
 public class CashAccountService : ICashAccountService
 {
     private readonly ICashAccountRepository _repository;
+    private readonly ICashMovementRepository _movementRepository;
 
-    public CashAccountService(ICashAccountRepository repository)
+    public CashAccountService(ICashAccountRepository repository, ICashMovementRepository movementRepository)
     {
         _repository = repository;
+        _movementRepository = movementRepository;
     }
 
     public async Task<List<CashAccountResponse>> GetAllAsync()
@@ -50,6 +53,29 @@ public class CashAccountService : ICashAccountService
 
         var created = await _repository.CreateAsync(entity);
         return MapToResponse(created);
+    }
+
+    public async Task RegisterPaymentAsync(string accountId, decimal amount, string concept, string description, string referenceType, string referenceId, DateTime date, object? session = null)
+    {
+        var account = await _repository.GetByIdAsync(accountId)
+            ?? throw new NotFoundException("CashAccount", accountId);
+
+        var movement = new CashMovement
+        {
+            CashAccountId = ObjectId.Parse(accountId),
+            Type = "Egreso",
+            Concept = concept,
+            Amount = amount,
+            Description = description,
+            Date = date,
+            Origin = "Automático",
+            ReferenceType = referenceType,
+            ReferenceId = ObjectId.Parse(referenceId),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _movementRepository.CreateAsync(movement, session);
+        await _repository.DecrementBalanceAsync(accountId, amount, session);
     }
 
     private static CashAccountResponse MapToResponse(CashAccount entity) => new()

@@ -55,6 +55,7 @@ public static class DependencyResolver
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
         services.AddScoped<ISaleRepository, SaleRepository>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -68,5 +69,6 @@ public static class DependencyResolver
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IProductionService, ProductionService>();
         services.AddScoped<ISaleService, SaleService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
     }
 }

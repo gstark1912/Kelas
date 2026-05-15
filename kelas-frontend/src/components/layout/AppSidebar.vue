@@ -44,7 +44,7 @@ const operationItems = [
   { path: '/raw-materials', label: 'Materias Primas', icon: '🧱', enabled: true },
   { path: '/production', label: 'Producción', icon: '⚙️', enabled: true },
   { path: '/sales', label: 'Ventas', icon: '💰', enabled: true },
-  { path: '/expenses', label: 'Gastos', icon: '📋', enabled: false },
+  { path: '/expenses', label: 'Gastos', icon: '📋', enabled: true },
   { path: '/cash', label: 'Caja', icon: '🏦', enabled: false }
 ]
 

@@ -92,6 +92,7 @@ import { computed, ref, watch } from 'vue'
 import AppModal from '@/components/common/AppModal.vue'
 import FormField from '@/components/common/FormField.vue'
 import productionService from '@/services/productionService'
+import { toDateInputValue, toUtcDateStart } from '@/utils/format'
 
 const props = defineProps({
   show: {
@@ -125,7 +126,7 @@ function createEmptyForm() {
   return {
     productId: '',
     quantity: null,
-    date: new Date().toISOString().slice(0, 10),
+    date: toDateInputValue(),
     notes: ''
   }
 }
@@ -153,7 +154,7 @@ function buildPayload(confirmInsufficientStock = false) {
   return {
     productId: form.value.productId,
     quantity: Number(form.value.quantity),
-    date: form.value.date,
+    date: toUtcDateStart(form.value.date),
     notes: form.value.notes?.trim() || null,
     confirmInsufficientStock
   }

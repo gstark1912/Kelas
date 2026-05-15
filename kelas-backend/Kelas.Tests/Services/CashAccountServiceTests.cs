@@ -12,12 +12,14 @@ namespace Kelas.Tests.Services;
 public class CashAccountServiceTests
 {
     private readonly Mock<ICashAccountRepository> _repositoryMock;
+    private readonly Mock<ICashMovementRepository> _movementRepositoryMock;
     private readonly CashAccountService _service;
 
     public CashAccountServiceTests()
     {
         _repositoryMock = new Mock<ICashAccountRepository>();
-        _service = new CashAccountService(_repositoryMock.Object);
+        _movementRepositoryMock = new Mock<ICashMovementRepository>();
+        _service = new CashAccountService(_repositoryMock.Object, _movementRepositoryMock.Object);
     }
 
     [Fact]
